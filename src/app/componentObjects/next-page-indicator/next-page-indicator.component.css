@@ -1,0 +1,31 @@
+.nextPageIndicator {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.nextPageIndicator h2{
+    font-size: 12px;
+}
+
+.box_nextPageIndicator {
+    cursor: pointer;
+    display: flex;
+    padding: 3px 7px 5px 9px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: 2px solid #E4E4E4;
+    transition: background 0.2s ease;
+    background: #FCFCFC;
+}
+
+.box_nextPageIndicator:hover {
+    background-color: #dfdfdf;
+}
+
+.box_nextPageIndicator h2{
+    font-size: 14px;
+    color: #737373;
+}

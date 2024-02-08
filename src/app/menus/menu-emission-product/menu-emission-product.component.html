@@ -1,0 +1,99 @@
+<div class="menusContentCenter" id="emissionProduct">
+    <div id="menuEmissionPartProduct">
+        <div id="searchBoxEmssionPartProduct">
+            <div id="boxInput_searchBoxEmssionPartProduct">
+                <img src="../assets/search.svg" alt="">
+                <input placeholder="Pesquise algum produto..." type="text" [(ngModel)]="searchProductTableInput"
+                    (ngModelChange)="searchProductTable()">
+            </div>
+            <app-next-page-indicator [pageCurrent]="currentPage" [pageMax]="pageMax"
+                (previousPage)="previousPage($event)"></app-next-page-indicator>
+        </div>
+        <div id="wrapBoxProductEmission">
+            <app-box-product-emission (sendIndex)="sendProductEmisson($event)" *ngFor="let number of indexAcessProduct"
+                [productData]="productData" [startIndex]="number"></app-box-product-emission>
+        </div>
+    </div>
+
+    <div id="checkOutProducts">
+        <div id="headerCheckOutProducts">
+            <div id="name_headerCheckOutProducts">
+                <img src="../assets/shopping.svg" alt="">
+                <h1>Carrinho</h1>
+            </div>
+            <div *ngIf="showPaymentBox" (click)="goPayment(false)" class="backBotton">
+                <img src="../assets/seta.svg" alt="">
+            </div>
+        </div>
+        <div id="boxCheckOutProducts">
+            <div *ngIf="showPaymentBox" id="paymentBox">
+                <div id="header_paymentBox">
+                    <h2>Escolha a forma de pagamento:</h2>
+                </div>
+                <div id="options_paymentBox">
+                    <div class="openOptionsSecondary">
+                        <div class="options_paymentBox_element"
+                            [ngStyle]="(optionSelect == 1) ? { 'border': '2px solid rgba(136, 168, 216, 1)' }  : { 'border': '2px solid rgba(228, 228, 228, 1)' }"
+                            (click)="selectOptions(1)">
+                            <div class="type_options_paymentBox_element">
+                                <img src="../../../assets/icon-pix.svg" alt="">
+                                <h2>Pix</h2>
+                            </div>
+                            <h2 class="infoType_options_paymentBox_element">Emite um QR como forma de pagamento.</h2>
+                        </div>
+                        <div *ngIf="clickInPix" id="optionsPix_openOptionsSecondary">
+                            <h2>Chave pix: 45231</h2>
+                            <img src="../../../assets/qrCode-test.svg" alt="">
+                        </div>
+                    </div>
+
+                    <div class="options_paymentBox_element"
+                        [ngStyle]="(optionSelect == 2) ? { 'border': '2px solid rgba(136, 168, 216, 1)' }  : { 'border': '2px solid rgba(228, 228, 228, 1)' }"
+                        (click)="selectOptions(2)">
+                        <div class="type_options_paymentBox_element">
+                            <img src="../../../assets/icon-money.svg" alt="">
+                            <h2>Dinheiro</h2>
+                        </div>
+                    </div>
+                    <div class="options_paymentBox_element"
+                        [ngStyle]="(optionSelect == 3) ? { 'border': '2px solid rgba(136, 168, 216, 1)' }  : { 'border': '2px solid rgba(228, 228, 228, 1)' }"
+                        (click)="selectOptions(3)">
+                        <div class="type_options_paymentBox_element">
+                            <img src="../../../assets/icon-card.svg" alt="">
+                            <h2>Cartão de débito ou crédito</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!showPaymentBox" id="elements_boxCheckOutProducts">
+                <app-box-check-out-product *ngFor="let number of arrayIn_boxCheckOutProducts"
+                    [productData]="productData" [startIndex]="number"></app-box-check-out-product>
+            </div>
+
+            <div id="checkOutInfo">
+                <div id="line_checkOutInfo"></div>
+                <div id="flex_checkOutInfo">
+                    <div id="values_checkOutInfo">
+                        <div id="total_values_checkOutInfo">
+                            <h2>Total:</h2>
+                            <h2>R$ 89,57</h2>
+                        </div>
+                        <div id="subtotal_values_checkOutInfo">
+                            <h2>Desconto:</h2>
+                            <h2>- R$ 12,5758</h2>
+                            <h2>Subtotal:</h2>
+                            <h2>R$ 89,57</h2>
+                        </div>
+                    </div>
+                    <div (click)="goPayment(true)" [ngStyle]="(showPaymentBox && optionSelect == 0) ? { 'cursor': 'not-allowed', 'background-color': '#dfdfdf' }  : { 'cursor': 'pointer', 'background-color': '#FCFCFC' }" id="confirm_checkOutInfo" class="no-select">
+                        <h2 *ngIf="!showPaymentBox">Ir para Pagamentos</h2>
+                        <h2 *ngIf="showPaymentBox && optionSelect == 0">Selecione uma opção</h2>
+                        <h2 *ngIf="showPaymentBox && optionSelect > 0">Finalizar com a opção</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

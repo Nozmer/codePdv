@@ -1,0 +1,170 @@
+<!-- popup -->
+<app-popup-delete-product (closePopUp)="closePopUp($event)" [ngStyle]="{ 'z-index': showPopUpRemove ? '1' : '-1' }"
+    #popUpRemove></app-popup-delete-product>
+
+<div class="menusContentCenter" #manageProducts id="manageProducts">
+    <div id="headerInfo_manageProducts">
+        <div class="box_headerInfo_manageProducts" id="boxProductTotal_headerInfo_manageProducts">
+            <h3>{{productDataLength}}</h3>
+            <h3>Total de produtos</h3>
+        </div>
+
+        <div class="box_headerInfo_manageProducts" id="boxLastProduct_headerInfo_manageProducts">
+            <div id="boxLastProductImages_headerInfo_manageProducts" *ngIf="productDataLength > 0">
+                <img *ngFor="let nameImage of productData.slice().reverse().slice(0, 3)"
+                    src="../../../assets/imageProductsUsers/{{nameImage.image_name}}" alt="">
+            </div>
+            <div id="InfoBoxLastProduct_headerInfo_manageProducts">
+                <h3>Caixa de leite</h3>
+                <h3>Ultimos produtos adicionados</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="tabs_manageProducts">
+        <div id="elementTabs_manageProducts">
+            <div (click)="changeTab_manageProducts(0)" [class.select_tab_elementTabs]="tabElement === 0"
+                class="tab_elementTabs_manageProducts">
+                <h3>Tabela dos produtos</h3>
+            </div>
+            <div (click)="changeTab_manageProducts(1)" [class.select_tab_elementTabs]="tabElement === 1"
+                class="tab_elementTabs_manageProducts">
+                <h3>Adicionar produtos</h3>
+            </div>
+        </div>
+
+        <div id="content_tabs_manageProducts">
+            <app-box-no-found *ngIf="showError403InTableProduct && tabElement === 0"></app-box-no-found>
+
+            <div *ngIf="tabElement === 0 && !showError403InTableProduct" id="tableProduct_content_tabs_manageProducts">
+                <div id="tableProduct_search">
+                    <div id="searchBox_tableProduct">
+                        <img src="../assets/search.svg" alt="">
+                        <input placeholder="Pesquise produtos..." type="text" [(ngModel)]="searchProductTableInput"
+                            (ngModelChange)="searchProductTable()">
+                    </div>
+                    <app-next-page-indicator [pageCurrent]="currentPage" [pageMax]="pageMax"
+                        (previousPage)="previousPage($event)"></app-next-page-indicator>
+                </div>
+
+
+                <div id="boxTableProduct">
+                    <div id="rowInfo">
+                        <p>Produtos</p>
+                        <p>Preço</p>
+                        <p>Código</p>
+                        <p>Desconto</p>
+                        <p>Quantidade no estoque</p>
+                        <p>Ações</p>
+                    </div>
+                    <app-table-row-tab (jsonActionWithIndex)="showPopUps($event)"
+                        *ngFor="let number of indexAcessProduct" [productData]="productData"
+                        [startIndex]="number"></app-table-row-tab>
+                </div>
+
+            </div>
+            <div *ngIf="tabElement === 1" id="addProduct_content_tabs_manageProducts">
+                <div id="box_infoBasicAddProduct">
+                    <div class="inputBox1_box_infoBasicAddProduct">
+                        <div class="headerMandatory">
+                            <h3>Nome do produto:</h3>
+                            <h2>*</h2>
+                        </div>
+                        <input type="text" [(ngModel)]="nameProduct" placeholder="Ex: ameixa, suco...">
+                    </div>
+
+                    <div class="inputBox1_box_infoBasicAddProduct">
+                        <div class="headerMandatory">
+                            <h3>Código do produto:</h3>
+                            <h2>*</h2>
+                        </div>
+                        <input type="text" [(ngModel)]="codeProduct" placeholder="Utlize o leitor de código barra">
+                    </div>
+
+                    <div class="inputBox2_box_infoBasicAddProduct">
+                        <div class="inputBox1_box_infoBasicAddProduct">
+                            <div class="headerMandatory">
+                                <h3>Preço:</h3>
+                                <h2>*</h2>
+                            </div>
+                            <input type="text" [(ngModel)]="priceProduct" placeholder="R$ 00,00">
+                        </div>
+                        <div class="inputBox1_box_infoBasicAddProduct">
+                            <div class="headerMandatory">
+                                <h3>Desconto:</h3>
+                            </div>
+                            <input type="number" [(ngModel)]="discontProduct" placeholder="%">
+                        </div>
+                    </div>
+
+                    <div class="inputBox1_box_infoBasicAddProduct">
+                        <div class="headerMandatory">
+                            <h3>Quatidade no estoque:</h3>
+                            <h2>*</h2>
+                        </div>
+                        <div class="inputBox2_box_infoBasicAddProduct">
+                            <input type="number" [(ngModel)]="min_quantity" placeholder="Atual">
+                            <input type="number" [(ngModel)]="max_quantity" placeholder="Maximo">
+                        </div>
+                    </div>
+
+                    <div class="inputBox1_box_infoBasicAddProduct">
+                        <div class="headerMandatory">
+                            <h3>Descrição do produto:</h3>
+                        </div>
+                        <textarea [(ngModel)]="descriptionProduct" name="" id=""></textarea>
+                    </div>
+                </div>
+                <div id="finishBox_infoBasicAddProduct">
+                    <div id="boxAddImage_infoBasicAddProduct">
+                        <h3>Adicionar Imagem:</h3>
+                        <div id="imagesRecent_infoBasicAddProduct">
+                            <div class="boxImageRecent">
+                                <img src="../assets/productBase.png" alt="">
+                                <img src="../assets/productBase.png" alt="">
+                                <img src="../assets/productBase.png" alt="">
+                            </div>
+                            <div id="addImageElement" (click)="openBoxInputSelectImageProduct()">
+                                <img *ngIf="imageSelectProduct != ''" [src]="imageSelectProduct" alt="">
+                                <h3 *ngIf="imageSelectProduct == ''">Adicionar imagem</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="previewElementAdd">
+                        <h3>Prévia</h3>
+                        <div id="box_previewElementAdd">
+                            <div id="image_box_previewElementAdd">
+                                <img src="../assets/productBase.png" alt="">
+                                <div id="infoImage_box_previewElementAdd">
+                                    <h3>Nome</h3>
+                                    <h3>Descrição</h3>
+                                </div>
+                            </div>
+
+                            <h3>R$...</h3>
+                            <h3>%...</h3>
+                            <h3>Atual/Max</h3>
+                        </div>
+                    </div>
+
+                    <div id="buttonAddProduct"
+                        [ngStyle]="(showLoading_buttonAddProduct || showFinish_buttonAddProduct || showError_buttonAddProduct) ? { 'background': '#E4E4E4' } : { 'background': '#FCFCFC' }"
+                        (click)="addProduct()">
+                        <h3
+                            *ngIf="!showLoading_buttonAddProduct && !showFinish_buttonAddProduct && !showError_buttonAddProduct">
+                            Adicionar Produto</h3>
+                        <h3 *ngIf="showError_buttonAddProduct">Campos em brancos ou dados invalidos</h3>
+                        <img id="loading_buttonAddProduct" *ngIf="showLoading_buttonAddProduct"
+                            src="../../../assets/load.gif" alt="">
+                        <h3 *ngIf="showFinish_buttonAddProduct">Produto adicionado: {{nameProduct}}</h3>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ignore -->
+<input type="file" (change)="selectImageSelectProduct($event)" #inputFile style="display: none;">

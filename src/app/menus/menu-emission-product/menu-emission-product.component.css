@@ -1,0 +1,319 @@
+/* emissionProduct */
+:host {
+    width: 100%;
+    height: 100%;
+}
+
+#menuEmissionPartProduct {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+#searchBoxEmssionPartProduct {
+    display: flex;
+    padding: 12px 18px;
+    align-items: center;
+    gap: 25px;
+    align-self: stretch;
+    border-radius: 15px 15px 5px 5px;
+    border: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#boxInput_searchBoxEmssionPartProduct {
+    display: flex;
+    padding: 10px 16px;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+    border-radius: 10px;
+    background: #FCFCFC;
+}
+
+#boxInput_searchBoxEmssionPartProduct input {
+    width: 100%;
+}
+
+#wrapBoxProductEmission {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 20px;
+    flex: 1 0 0;
+    align-self: stretch;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#checkOutProducts {
+    display: flex;
+    width: 370px;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: 18px;
+    border: 1px solid #E4E4E4;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#headerCheckOutProducts {
+    display: flex;
+    align-self: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 24px;
+    background: #FCFCFC;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#headerCheckOutProducts h1 {
+    font-size: 18px;
+}
+
+#name_headerCheckOutProducts{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0px 15px;
+}
+
+#boxCheckOutProducts {
+    display: flex;
+    padding: 30px 0px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 0px 0px 18px 18px;
+    background: #EDEDED;
+}
+
+#elements_boxCheckOutProducts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    gap: 24px;
+    flex: 1 0 0;
+    overflow-y: auto;
+}
+
+#checkOutInfo {
+    display: flex;
+    padding: 30px 30px 0px 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+}
+
+#line_checkOutInfo {
+    border: 1px dashed #adadad;
+    align-self: stretch;
+}
+
+#flex_checkOutInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+}
+
+#values_checkOutInfo {
+    display: flex;
+    padding: 18px 24px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 15px;
+    border: 1px solid #E4E4E4;
+    background: #FCFCFC;
+}
+
+#total_values_checkOutInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+
+#total_values_checkOutInfo h2:first-child {
+    font-size: 14px;
+}
+
+#total_values_checkOutInfo h2:last-child {
+    font-size: 18px;
+}
+
+#subtotal_values_checkOutInfo {
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: flex-start;
+    row-gap: 8px;
+    flex-wrap: wrap;
+}
+
+#subtotal_values_checkOutInfo h2 {
+    color: #8A8A8A;
+    font-size: 11px;
+}
+
+#subtotal_values_checkOutInfo h2:nth-child(2) {
+    color: #C85959;
+}
+
+#confirm_checkOutInfo {
+    cursor: pointer;
+    display: flex;
+    padding: 15px 20px;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 20px;
+    background: #FCFCFC;
+    border: 1px solid #E4E4E4;
+    transition: background 0.2s ease;
+}
+
+#confirm_checkOutInfo h2 {
+    font-size: 15px;
+}
+
+#confirm_checkOutInfo:hover {
+    background-color: #dfdfdf !important;
+}
+
+#paymentBox {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    height: 100%;
+    padding: 0px 25px 0px 25px;
+    box-sizing: border-box;
+}
+
+#header_paymentBox {
+    display: flex;
+    justify-content: center;
+    background: #F6F6F6;
+    border: 1px solid #E4E4E4;
+    border-radius: 10px 10px 0px 0px;
+    padding: 12px 18px;
+    gap: 10px;
+}
+
+#header_paymentBox h2 {
+    font-size: 13px;
+}
+
+#options_paymentBox {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 12px;
+    max-height: 370px;
+    overflow-y: scroll;
+    scrollbar-width: none
+}
+
+.options_paymentBox_element {
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: rgba(252, 252, 252, 1);
+    border: 2px solid rgba(228, 228, 228, 1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    gap: 12px;
+    padding: 16px 20px;
+    transition: border 0.2s ease;
+}
+
+.options_paymentBox_element:hover {
+    border: 2px solid rgba(136, 168, 216, 1) !important;
+}
+
+.type_options_paymentBox_element {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background-color: rgba(237, 237, 237, 1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+}
+
+.type_options_paymentBox_element h2 {
+    font-size: 14px;
+}
+
+.infoType_options_paymentBox_element {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+}
+
+.openOptionsSecondary {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+}
+
+#optionsPix_openOptionsSecondary {
+    position: relative;
+    border-radius: 10px;
+    background-color: rgba(252, 252, 252, 1);
+    border: 2px solid rgba(228, 228, 228, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    gap: 6px;
+    padding: 16px 20px;
+    bottom: 2px;
+}
+
+#optionsPix_openOptionsSecondary h2{
+    font-size: 12px;
+}
+
+#optionsPix_openOptionsSecondary img{
+    width: 112px;
+    height: 112px;
+}
+
+.backBotton {
+    cursor: pointer;
+    display: flex;
+    padding: 8px;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1.5px solid #E4E4E4;
+    background: #FCFCFC;
+}

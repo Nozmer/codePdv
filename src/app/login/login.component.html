@@ -1,0 +1,70 @@
+<div id="boxLoginRegister">
+    <div id="header_boxLoginRegister">
+        <h1 *ngIf="tabLoginRegister == 0">Login</h1>
+        <h1 *ngIf="tabLoginRegister == 1">Bem vindo ao</h1>
+        <img src="../../assets/codePdvText.svg" alt="">
+    </div>
+
+    <div *ngIf="tabLoginRegister == 0" class="content_boxLoginRegister">
+        <input type="text" class="input_boxLoginRegister" [(ngModel)]="emailInput_login" placeholder="Email">
+        <input type="text" class="input_boxLoginRegister" [(ngModel)]="passwordInput_login" placeholder="Senha">
+        <div (click)="enterLogin()" class="buttonSend_boxLoginRegister" [class.selectButtonSendColor]="showMessagesInLogin">
+            <p *ngIf="showMessageDefault">Acessar</p>
+            <div *ngIf="showMessagesInLogin">
+                <p *ngIf="showMessageOk && !showLoading">Redirecionando para seu Dashboard</p>
+                <p *ngIf="showMessageBlank && !showLoading">Campos em brancos</p>
+                <p *ngIf="showMessageError && !showLoading">Email ou senha incorretos</p>
+                <img *ngIf="showLoading" src="../../assets/load.gif" alt="">
+            </div>
+        </div>
+        <div class="division_boxLoginRegister">
+            <div class="line_division_boxLoginRegister"></div>
+            <p>Ou</p>
+            <div class="line_division_boxLoginRegister"></div>
+        </div>
+        <div class="acessButton_boxLoginRegister">
+            <img src="../../assets/googleIcon.svg" alt="">
+            <p>Entrar com o google</p>
+        </div>
+        <div class="divideBox_boxLoginRegister">
+            <div class="buttonSend2_boxLoginRegister" (click)="changeTabLoginRegister(1)">
+                <p>Não tem uma conta?</p>
+            </div>
+            <div class="buttonSend2_boxLoginRegister">
+                <p>Esqueceu a senha?</p>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="tabLoginRegister == 1" class="content_boxLoginRegister">
+        <input type="text" class="input_boxLoginRegister" [(ngModel)]="nameInput_register"
+            placeholder="Nome e sobrenome">
+        <input type="text" class="input_boxLoginRegister" [(ngModel)]="emailInput_register" placeholder="Email">
+        <div class="divideBox_boxLoginRegister">
+            <input type="password" class="input_boxLoginRegister" [(ngModel)]="passwordInput_register"
+                placeholder="Senha">
+            <input type="password" class="input_boxLoginRegister" placeholder="Senha novamente">
+        </div>
+        <div (click)="createAccount()" class="buttonSend_boxLoginRegister" [class.selectButtonSendColor]="showMessagesInRegister">
+            <p *ngIf="showMessageDefault">Criar conta</p>
+            <div *ngIf="showMessagesInRegister">
+                <p *ngIf="showMessageOk && !showLoading">Conta criada! Redirecionando para sua aba</p>
+                <p *ngIf="showMessageBlank && !showLoading">Campos em brancos</p>
+                <p *ngIf="showMessageError && !showLoading">A senha deve conter 8 carcteres</p>
+                <img *ngIf="showLoading" src="../../assets/load.gif" alt="">
+            </div>
+        </div>
+        <div class="division_boxLoginRegister">
+            <div class="line_division_boxLoginRegister"></div>
+            <p>Ou</p>
+            <div class="line_division_boxLoginRegister"></div>
+        </div>
+        <div class="acessButton_boxLoginRegister">
+            <img src="../../assets/googleIcon.svg" alt="">
+            <p>Criar conta com o google</p>
+        </div>
+        <div class="buttonSend2_boxLoginRegister" (click)="changeTabLoginRegister(0)">
+            <p>Voltar para o login</p>
+        </div>
+    </div>
+</div>

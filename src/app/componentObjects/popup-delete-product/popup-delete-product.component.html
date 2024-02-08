@@ -1,0 +1,21 @@
+<div id="popupDeleteProduct">
+    <div id="header_popupDeleteProduct">
+        <img id="deleteHeader" src="../../../assets/delete.svg" alt="">
+        <h2>Excluir o produto:</h2>
+        <div id="contentActions">
+            <div class="boxAction" (click)="clickClosePopUp()">
+                <img src="../../../assets/delete2.svg" alt="">
+            </div>
+            <div class="boxAction" (click)="deleteProduct()">
+                <img src="../../../assets/rightWhite.svg" alt="">
+            </div>
+        </div>
+    </div>
+    <div id="content_popupDeleteProducts">
+        <div id="elementDelete">
+            <img src="../../../assets/imageProductsUsers/{{nameImageProduct}}" alt="">
+            <h2 id="name_elementDelete">{{nameProduct}}</h2>
+            <h2>{{codeProduct}}</h2>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,157 @@
+<div class="menusContentCenter" id="manageCashRegister">
+    <div id="flexManageCashRegister">
+        <div id="boxShowCashRegisters">
+            <div id="header_boxShowCashRegisters">
+                <h2>Caixas</h2>
+                <div id="boxAddCashregisters">
+                    <h3>Adicionar caixa</h3>
+                </div>
+            </div>
+
+            <div id="content_boxShowCashRegisters">
+                <div [class.isSelect]="boxSelectCashRegister == 0" (click)="changeBoxSelectCashRegister(0)" class="box_content_boxShowCashRegisters">
+                    <div class="nameBox_content_boxShowCashRegisters">
+                        <img src="../assets/cashRegister_icon.svg" alt="">
+                        <h3>Caixa 1</h3>
+                    </div>
+                    <app-actions-table></app-actions-table>
+                </div>
+
+                <div [class.isSelect]="boxSelectCashRegister == 1" (click)="changeBoxSelectCashRegister(1)" class="box_content_boxShowCashRegisters">
+                    <div class="nameBox_content_boxShowCashRegisters">
+                        <img src="../assets/cashRegister_icon.svg" alt="">
+                        <h3>Caixa 2</h3>
+                    </div>
+                    <app-actions-table></app-actions-table>
+                </div>
+            </div>
+        </div>
+
+        <div id="box_infoAboutCashRegister">
+            <div id="header_box_infoAboutCashRegister">
+                <div *ngIf="selectTab == 1" (click)="changeTabsEdit(0)" class="backBotton">
+                    <img src="../assets/seta.svg" alt="">
+                </div>
+                <div id="header_infoAboutTab">
+                    <h1 *ngIf="selectTab == 0">Dashbord de</h1>
+                    <h1 *ngIf="selectTab == 1">Configurações de</h1>
+                    <div class="nameBox_content_boxShowCashRegisters">
+                        <img src="../assets/cashRegister_icon.svg" alt="">
+                        <h3>Caixa {{boxSelectCashRegister + 1}}</h3>
+                    </div>  
+                </div>
+            </div>
+
+            <div *ngIf="selectTab == 0" id="partDashboard_box_infoAboutCashRegister">
+                <div id="content_partDashboard">
+                    <div id="tableLastSalesCashRegister">
+                        <div id="header_tableLastSalesCashRegister">
+                            <div id="text_nextPage">
+                                <h2>Ultimas vendas do caixa:</h2>
+                                <app-next-page-indicator></app-next-page-indicator>
+                            </div>
+                            <div id="search_data">
+                                <div id="search_tableLastSalesCashRegister">
+                                    <img src="../../../assets/search.svg" alt="">
+                                    <input type="text" placeholder="Pesquise por produtos">
+                                </div>
+                                <div id="date_tableLastSalesCashRegister">
+                                    <img src="../../../assets/date.svg" alt="">
+                                    <input type="date" name="" id="">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="content_tableLastSalesCashRegister">
+                            <app-box-table-sales-cash-register></app-box-table-sales-cash-register>
+                            <app-box-table-sales-cash-register></app-box-table-sales-cash-register>
+                        </div>
+                    </div>
+                    <div id="infoConfig_tableLastSalesCashRegister">
+                        <div id="infoTotalSale_tableLastSalesCashRegister">
+                            <h2>20</h2>
+                            <p>Total de vendas do caixa.</p>
+                        </div>
+                        <div (click)="changeTabsEdit(1)" id="buttonAcessPermission_tableLastSalesCashRegister">
+                            <img src="../../../assets/permisson.svg" alt="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div *ngIf="selectTab == 1" id="partEdit_box_infoAboutCashRegister">
+                <div class="contentPartEditTopic">
+                    <div class="header_contentPartEditTopic">
+                        <h1>Informações de usuario e senha:</h1>
+                        <p>Aqui é gerado o nome e senha do seu caixa, você utilizará para acessar o seu caixa pelo
+                            login, tome
+                            cuidado com esses dados e certifique-se nas permissões o que esse caixa pode fazer.</p>
+                    </div>
+
+                    <div id="infoCombinationPass">
+                        <div class="box_infoCombinationPass">
+                            <p>Nome:</p>
+                            <div class="elementBox_box_infoCombinationPass">
+                                <p>nome123</p>
+                            </div>
+                        </div>
+                        <div class="box_infoCombinationPass">
+                            <p>Senha:</p>
+                            <div class="elementBox_box_infoCombinationPass">
+                                <p>senha123</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="generateCombinationBox">
+                        <h3>Gerar nova combinação</h3>
+                    </div>
+                </div>
+
+                <div class="contentPartEditTopic">
+                    <div class="header_contentPartEditTopic">
+                        <h1>Permissões:</h1>
+                        <p>Por padrão o caixa pode apenas acessar Emissão e vender produtos.</p>
+                    </div>
+                    <div id="flexBoxPermission">
+                        <div class="side_flexBoxPermission">
+                            <p>Em Gerenciar Produtos:</p>
+                            <div class="flex_boxSelectPermission">
+                                <app-box-select-permission
+                                    (permissionChanged)="onPermissionChanged($event, 0)"></app-box-select-permission>
+                                <p>Pode acessar o Gerenciar Produtos</p>
+                            </div>
+                            <div class="flex_boxSelectPermission">
+                                <app-box-select-permission
+                                    (permissionChanged)="onPermissionChanged($event, 1)"></app-box-select-permission>
+                                <p>Pode adicionar e editar produtos</p>
+                            </div>
+                            <div class="flex_boxSelectPermission">
+                                <app-box-select-permission
+                                    (permissionChanged)="onPermissionChanged($event, 2)"></app-box-select-permission>
+                                <p>Pode deletar produtos</p>
+                            </div>
+                        </div>
+                        <div class="side_flexBoxPermission">
+                            <p>Administrador</p>
+                            <div class="flex_boxSelectPermission">
+                                <app-box-select-permission
+                                    (permissionChanged)="onPermissionChanged($event, 3)"></app-box-select-permission>
+                                <p>Pode acessar todas as funções</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="flexActionsCashRegister">
+                    <div id="boxSave_flexActionsCashRegister">
+                        <p>Salvar Alterções</p>
+                    </div>
+                    <div id="boxDelete_flexActionsCashRegister">
+                        <p>Excluir Caixa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

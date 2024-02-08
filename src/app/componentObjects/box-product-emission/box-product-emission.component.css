@@ -1,0 +1,73 @@
+.boxProductEmission {
+    display: flex;
+    flex-direction: column;
+    width: 230px;
+    align-items: flex-start;
+    border-radius: 20px;
+    border: 2px solid #F3F4F4;
+    overflow: hidden;
+}
+
+.boxProductEmission img {
+    width: 230px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.infoProductEmisson {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    min-height: 144px;
+    background-color: #FEFEFE;
+}
+
+.boxPrinceProductEmission,
+.boxInfoProductEmisson {
+    display: flex;
+    gap: 8px;
+    align-self: stretch;
+    background: #FEFEFE;
+}
+
+.boxPrinceProductEmission {
+    padding: 18px 22px; 
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+    background: #F6F6F6;
+}
+
+.boxInfoProductEmisson {
+    padding: 20px;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.boxPrinceProductEmission h2 {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+}
+
+.boxPrinceProductEmission h2 span {
+    font-size: 20px;
+}
+
+.buttonSendCheckOut {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: #3C3C3C;
+    transition: border-radius 0.2s ease;
+}
+
+.buttonSendCheckOut:hover{
+    border-radius: 20px;
+}
+
+.boxInfoProductEmisson h2 {
+    font-size: 14px;
+    -webkit-line-clamp: 2;
+}

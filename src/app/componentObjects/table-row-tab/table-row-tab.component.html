@@ -1,0 +1,22 @@
+<div class="tableRowTab">
+    <div class="rowImageInfo_table">
+        <img src="../../assets/imageProductsUsers/{{nameImageProduct}}" alt="">
+        <div class="infoColumnTableImage">
+            <h1>{{nameProduct}}</h1>
+            <h2>{{descriptionProduct}}</h2>
+        </div>
+    </div>
+    <p>{{priceProduct}}</p>
+    <p>{{codeProduct}}</p>
+    <p>{{discontProduct}}%</p>
+    <div class="quantityBox">
+        <div class="bar_quantity">
+            <div class="bar_quantity-indicator"></div>
+        </div>
+        <div class="text_quantity">
+            <h2>{{min_quantity}}</h2>
+            <h2>{{max_quantity}}</h2>
+        </div>
+    </div>
+    <app-actions-table (actionEdit)="actionWithIndexProduct($event)"></app-actions-table>
+</div>

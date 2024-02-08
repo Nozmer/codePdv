@@ -1,0 +1,392 @@
+/* dashboard */
+:host {
+    width: 100%;
+    height: 100%;
+}
+
+#dashboard {
+    display: flex;
+    align-items: flex-start;
+    gap: 34px;
+    align-self: stretch;
+}
+
+#boxInfoPeriodical {
+    display: flex;
+    min-width: 700px;
+    width: 64%;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 16px;
+    border: 1px solid #E4E4E4;
+}
+
+#boxChangeInfoPeriodical {
+    display: flex;
+    padding: 10px 52px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-bottom: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#flexElementsChangeInfoPeriodical {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #FCFCFC;
+}
+
+.elementChangeInfoPeriodical p {
+    font-size: 13px;
+}
+
+.elementChangeInfoPeriodical {
+    cursor: pointer;
+    display: flex;
+    padding: 10px 14px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.elementChangeInfoPeriodical:hover {
+    background: #D1D1D1;
+}
+
+#content_boxInfoPeriodical {
+    display: flex;
+    padding: 18px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    align-self: stretch;
+    overflow-y: auto;
+}
+
+#flexCardsInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+}
+
+#cardNumberInfo {
+    display: flex;
+    padding: 18px 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #FCFCFC;
+}
+
+#cardNumberInfo p:first-child {
+    font-size: 12px;
+    color: #8A8A8A;
+}
+
+#cardNumberInfo p:last-child {
+    font-size: 24px;
+}
+
+#box_flexCardsProducts {
+    display: flex;
+    padding: 18px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1 0 0;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #FCFCFC;
+}
+
+#box_flexCardsProducts p:first-child {
+    color: #8A8A8A;
+    font-size: 12px;
+}
+
+#flexCardsProducts {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+#box_salesChart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #FCFCFC;
+}
+
+#header_salesChart {
+    display: flex;
+    padding: 14px 20px;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#header_salesChart h2 {
+    font-size: 18px;
+}
+
+#content_salesChart {
+    display: flex;
+    padding: 24px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+#infoAboutManageCashRegister {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 16px;
+    border: 1px solid #E4E4E4;
+}
+
+#header_infoAboutManageCashRegister {
+    display: flex;
+    padding: 16px 24px;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-bottom: 1px solid #E4E4E4;
+    background: #F6F6F6;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+#header_infoAboutManageCashRegister h2 {
+    font-size: 16px;
+}
+
+#content_infoAboutManageCashRegister {
+    display: flex;
+    padding: 20px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+#header_content_infoAboutManageCashRegister {
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
+    border-radius: 10px;
+    background: #F6F6F6;
+}
+
+#header_content_infoAboutManageCashRegister p {
+    color: #555;
+    font-size: 12px;
+}
+
+#header_content_infoAboutManageCashRegister p:first-child {
+    flex: 1 0 0;
+}
+
+#header_content_infoAboutManageCashRegister p:last-child {
+    width: 120px;
+}
+
+.flexBox_infoAboutManageCashRegister {
+    display: flex;
+    padding-right: 20px;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+    justify-content: space-between;
+}
+
+.elementBox_infoAboutManageCashRegister {
+    display: flex;
+    padding: 8px 20px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+.elementBox_infoAboutManageCashRegister img {
+    width: 16px;
+    height: 16px;
+}
+
+.elementBox_infoAboutManageCashRegister h2 {
+    font-size: 12px;
+}
+
+.boxTotal_infoAboutManageCashRegister {
+    width: 120px;
+    align-self: stretch;
+}
+
+.boxTotal_infoAboutManageCashRegister h2 {
+    font-size: 20px;
+}
+
+#infoSideDashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+#boxTotalMoney {
+    display: flex;
+    padding: 20px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#boxTotalMoney p:first-child {
+    font-size: 13px;
+    color: #2D2D2D;
+}
+
+#content_boxTotalMoney {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+#content_boxTotalMoney h1 {
+    font-size: 24px;
+    color: #2D2D2D;
+}
+
+#content_boxTotalMoney p {
+    font-size: 13px;
+    color: #2D2D2D;
+}
+
+#boxRecentActivity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 16px;
+    border: 1px solid #E4E4E4;
+    overflow: auto;
+}
+
+#header_boxRecentActivity {
+    display: flex;
+    padding: 16px 24px;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-bottom: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+#header_boxRecentActivity h2 {
+    font-size: 16px;
+}
+
+#content_boxRecentActivity {
+    display: flex;
+    padding: 20px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.element_boxRecentActivity {
+    display: flex;
+    padding: 14px 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+.imageInfo_boxRecentActivity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1 0 0;
+}
+
+.imageInfo_boxRecentActivity img {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.contentInfo_boxRecentActivity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+}
+
+.contentInfo_boxRecentActivity h2:first-child {
+    font-size: 14px;
+}
+
+.contentInfo_boxRecentActivity h2:last-child {
+    font-size: 12px;
+    color: #828282;
+}
+
+.date_boxRecentActivity{
+    display: flex;
+    padding: 10px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.date_boxRecentActivity h2{
+    color: #B0B0B0;
+}
+
+.date_boxRecentActivity:first-child h2{
+    font-size: 14px;
+}
+
+.date_boxRecentActivity:last-child h2{
+    font-size: 12px;
+}

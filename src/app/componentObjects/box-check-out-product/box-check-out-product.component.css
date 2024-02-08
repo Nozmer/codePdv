@@ -1,0 +1,116 @@
+:host{
+    display: flex;
+    width: 100%;
+}
+
+.boxCheckOutProduct {
+    display: flex;
+    padding-left: 20px;
+    align-items: center;
+    width: 100%;
+    align-self: stretch;
+}
+
+.boxCheckOutProduct img {
+    margin-right: -10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border: 8px solid #FCFCFC;
+}
+
+.boxElementCheckOutProduct {
+    display: flex;
+    padding: 16px 30px 16px 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1 0 0;
+    border-radius: 20px 0px 0px 20px;
+    background: #FCFCFC;
+}
+
+.titlePrince_boxElementCheckOutProduct {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    align-self: stretch;
+}
+
+.titlePrince_boxElementCheckOutProduct h2:first-child {
+    font-size: 14px;
+    flex: 1 0 0;
+    -webkit-line-clamp: 1;
+}
+
+.titlePrince_boxElementCheckOutProduct h2:last-child {
+    font-size: 18px;
+    -webkit-line-clamp: 1;
+}
+
+.addAndCode_boxElementCheckOutProduct {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    align-self: stretch;
+}
+
+.addNumberProductBox {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.box_moreLess {
+    cursor: pointer;
+    display: flex;
+    padding: 2px 9px;
+    align-items: center;
+    gap: 10px;
+    background: #EDEDED;
+    transition: background 0.2s ease;
+}
+
+.box_moreLess:hover {
+    background-color: rgb(189, 189, 189);
+}
+
+.box_moreLess h2 {
+    line-height: normal;
+    font-size: 16px;
+}
+
+.boxCount_addNumberProductBox {
+    display: flex;
+    padding: 3px 10px;
+    align-items: center;
+    gap: 10px;
+}
+
+.boxCount_addNumberProductBox h2 {
+    font-size: 13px;
+}
+
+.codeProduct_addNumberProductBox {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+}
+
+.boxCodeProduct_addNumberProductBox {
+    display: flex;
+    padding: 3px 10px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 5px;
+    background: #EDEDED;
+}
+
+.codeProduct_addNumberProductBox h2:first-child {
+    font-size: 12px;
+}

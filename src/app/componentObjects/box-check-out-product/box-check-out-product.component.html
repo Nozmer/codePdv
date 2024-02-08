@@ -1,0 +1,28 @@
+<div class="boxCheckOutProduct">
+    <img src="../../../assets/imageProductsUsers/{{nameImageProduct}}" alt="">
+    <div class="boxElementCheckOutProduct">
+        <div class="titlePrince_boxElementCheckOutProduct">
+            <h2>{{nameProduct}}</h2>
+            <h2>{{priceProduct}}</h2>
+        </div>
+        <div class="addAndCode_boxElementCheckOutProduct">
+            <div class="addNumberProductBox no-select">
+                <div class="box_moreLess" (click)="addValueNumber(true)">
+                    <h2>+</h2>
+                </div>
+                <div class="boxCount_addNumberProductBox">
+                    <h2>{{number}}</h2>
+                </div>
+                <div class="box_moreLess" (click)="addValueNumber(false)">
+                    <h2>-</h2>
+                </div>
+            </div>
+            <div class="codeProduct_addNumberProductBox">
+                <h2>C:</h2>
+                <div class="boxCodeProduct_addNumberProductBox">
+                    <h2>{{codeProduct}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

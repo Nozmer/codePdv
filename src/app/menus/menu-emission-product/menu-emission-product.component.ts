@@ -3,6 +3,7 @@ import { ApiService } from '../../api.service';
 // rxjs
 import { catchError, concatMap, tap } from 'rxjs/operators';
 import { EMPTY, of } from 'rxjs';
+import { isUndefined } from 'util';
 
 
 @Component({
@@ -20,16 +21,81 @@ export class MenuEmissionProductComponent {
 
   // sendProductEmisson
   arrayIn_boxCheckOutProducts: any = [];
+  numberQuantity: any = [];
 
   sendProductEmisson(indexProduct: number) {
-    if (!this.arrayIn_boxCheckOutProducts.includes(indexProduct)) {
-      this.arrayIn_boxCheckOutProducts.push(indexProduct);
+    if (!this.showPaymentBox) {
+      if (!this.arrayIn_boxCheckOutProducts.includes(indexProduct)) {
+        this.showSelectProduct = false;
+        this.arrayIn_boxCheckOutProducts.push(indexProduct);
+        this.numberQuantity.push(1);
+        this.checkoutCalculation(indexProduct, false);
+      }
+      else {
+        this.checkoutCalculation(indexProduct, true);
+      }
     }
   }
-  
+
   // checkout calculation
-  checkoutCalculation(product: any){
-    
+  price_total: string = "0,00";
+  price_subtotal: string = "0,00";
+  discount_subtotal: string = "0,00";
+
+  checkoutCalculation(indexProduct: any, sameProduct: boolean, isRemoving?: boolean) {
+    // covert string to number
+    let priceTotalConvert = parseFloat(this.price_total.replace(',', '.'));
+    let priceSubConvert = parseFloat(this.price_subtotal.replace(',', '.'));
+    let discountSubConvert = parseFloat(this.discount_subtotal.replace(',', '.'));
+
+    const product = this.productData[indexProduct];
+
+    const price = parseFloat(product.price.replace(',', '.'));
+    const discountPercentage = parseFloat(product.discount);
+
+    const discountAmount = (price * discountPercentage) / 100;
+    const total = price - discountAmount;
+    const subtotal = price;
+
+    // += -=
+    if (isRemoving) {
+      priceTotalConvert -= total;
+      priceSubConvert -= subtotal;
+      discountSubConvert -= discountAmount;
+    } else{
+      priceTotalConvert += total;
+      priceSubConvert += subtotal;
+      discountSubConvert += discountAmount;  
+    }
+
+    // formatted
+    const formattedTotal = priceTotalConvert.toFixed(2).replace('.', ',');
+    const formattedSubtotal = priceSubConvert.toFixed(2).replace('.', ',');
+    const formattedDiscount = discountSubConvert.toFixed(2).replace('.', ',');
+
+    this.price_total = formattedTotal;
+    this.price_subtotal = formattedSubtotal;
+    this.discount_subtotal = formattedDiscount;
+
+    // add +1 if same product or add from isRemoving
+    if (sameProduct) {
+      const indexOfProduct = this.arrayIn_boxCheckOutProducts.indexOf(indexProduct);
+      this.numberQuantity[indexOfProduct] = this.numberQuantity[indexOfProduct] += 1;
+    }
+
+    // add -1 if isRemoving
+    if (isRemoving) {
+      const indexOfProduct = this.arrayIn_boxCheckOutProducts.indexOf(indexProduct);
+      this.numberQuantity[indexOfProduct] = this.numberQuantity[indexOfProduct] - 1;
+    }
+  }
+
+  isRemoving(isRemoving: any) {
+    if (isRemoving.isRemoving) {
+      this.checkoutCalculation(isRemoving.index, false, isRemoving.isRemoving);
+    } else {      
+      this.checkoutCalculation(isRemoving.index, true);
+    }
   }
 
   // searchProductTable and show
@@ -133,11 +199,15 @@ export class MenuEmissionProductComponent {
 
   // goPayment
   showPaymentBox: boolean = false;
+  showSelectProduct: boolean = true;
+
   goPayment(goPayment: boolean) {
-    if (goPayment) {
-      this.showPaymentBox = true;
-    } else {
-      this.showPaymentBox = false;
+    if (this.arrayIn_boxCheckOutProducts.length > 0) {
+      if (goPayment) {
+        this.showPaymentBox = true;
+      } else {
+        this.showPaymentBox = false;
+      }
     }
   }
 }

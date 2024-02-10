@@ -67,8 +67,8 @@
             </div>
 
             <div *ngIf="!showPaymentBox" id="elements_boxCheckOutProducts">
-                <app-box-check-out-product *ngFor="let number of arrayIn_boxCheckOutProducts"
-                    [productData]="productData" [startIndex]="number"></app-box-check-out-product>
+                <app-box-check-out-product *ngFor="let indexProduct of arrayIn_boxCheckOutProducts; let i = index"
+                    [productData]="productData" (isRemoving)="isRemoving($event)" [numberQuantity]="numberQuantity[i]" [startIndex]="indexProduct"></app-box-check-out-product>
             </div>
 
             <div id="checkOutInfo">
@@ -77,17 +77,18 @@
                     <div id="values_checkOutInfo">
                         <div id="total_values_checkOutInfo">
                             <h2>Total:</h2>
-                            <h2>R$ 89,57</h2>
+                            <h2>R$ {{price_total}}</h2>
                         </div>
                         <div id="subtotal_values_checkOutInfo">
                             <h2>Desconto:</h2>
-                            <h2>- R$ 12,5758</h2>
+                            <h2>- R$ {{discount_subtotal}}</h2>
                             <h2>Subtotal:</h2>
-                            <h2>R$ 89,57</h2>
+                            <h2>R$ {{price_subtotal}}</h2>
                         </div>
                     </div>
-                    <div (click)="goPayment(true)" [ngStyle]="(showPaymentBox && optionSelect == 0) ? { 'cursor': 'not-allowed', 'background-color': '#dfdfdf' }  : { 'cursor': 'pointer', 'background-color': '#FCFCFC' }" id="confirm_checkOutInfo" class="no-select">
-                        <h2 *ngIf="!showPaymentBox">Ir para Pagamentos</h2>
+                    <div (click)="goPayment(true)" [ngStyle]="(showPaymentBox && optionSelect == 0 || showSelectProduct) ? { 'cursor': 'not-allowed', 'background-color': '#dfdfdf' }  : { 'cursor': 'pointer', 'background-color': '#FCFCFC' }" id="confirm_checkOutInfo" class="no-select">
+                        <h2 *ngIf="!showPaymentBox && !showSelectProduct">Ir para Pagamentos</h2>
+                        <h2 *ngIf="showSelectProduct">Selecione um produto</h2>
                         <h2 *ngIf="showPaymentBox && optionSelect == 0">Selecione uma opção</h2>
                         <h2 *ngIf="showPaymentBox && optionSelect > 0">Finalizar com a opção</h2>
                     </div>

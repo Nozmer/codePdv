@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-box-check-out-product',
@@ -24,13 +24,25 @@ export class BoxCheckOutProductComponent {
   }
 
   // add
-  number: number = 1;
+  @Input() numberQuantity: number = 1;
+  @Output() isRemoving: EventEmitter<any> = new EventEmitter();
+
   addValueNumber(value: boolean): void {
     if (value) {
-      this.number++;
+      this.numberQuantity++;
+      const reponse = {
+        index: this.startIndex,
+        isRemoving: false
+      }
+      this.isRemoving.emit(reponse);
     } else {
-      if (this.number > 1) {
-        this.number--;
+      if (this.numberQuantity > 1) {
+        this.numberQuantity--;
+        const reponse = {
+          index: this.startIndex,
+          isRemoving: true
+        }
+        this.isRemoving.emit(reponse);
       };
     }
   };

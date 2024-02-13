@@ -41,4 +41,16 @@ export class ApiService {
     const url = `${this.apiUrl}/uploadImageProduct`;
     return this.http.post(url, data);
   }
+
+  // menu: manageEmissionProduct
+  addPayment(data: any): Observable<any> {
+    const url = `${this.apiUrl}/addPayment`;
+    return this.http.post(url, data);
+  }
+
+  // menu: manageDashBoard
+  salesStatistics(data: any): Observable<any> {
+    const url = `${this.apiUrl}/salesStatistics`;
+    return this.http.post(url, data);
+  }
 }

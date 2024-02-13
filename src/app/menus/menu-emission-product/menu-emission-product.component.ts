@@ -1,10 +1,8 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from '../../api.service';
 // rxjs
-import { catchError, concatMap, tap } from 'rxjs/operators';
-import { EMPTY, of } from 'rxjs';
-import { isUndefined } from 'util';
-
+import { catchError } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-menu-emission-product',
@@ -62,10 +60,10 @@ export class MenuEmissionProductComponent {
       priceTotalConvert -= total;
       priceSubConvert -= subtotal;
       discountSubConvert -= discountAmount;
-    } else{
+    } else {
       priceTotalConvert += total;
       priceSubConvert += subtotal;
-      discountSubConvert += discountAmount;  
+      discountSubConvert += discountAmount;
     }
 
     // formatted
@@ -93,7 +91,7 @@ export class MenuEmissionProductComponent {
   isRemoving(isRemoving: any) {
     if (isRemoving.isRemoving) {
       this.checkoutCalculation(isRemoving.index, false, isRemoving.isRemoving);
-    } else {      
+    } else {
       this.checkoutCalculation(isRemoving.index, true);
     }
   }
@@ -127,7 +125,7 @@ export class MenuEmissionProductComponent {
       this.pageMax = Math.ceil(this.correspondingProducts.length / this.productsPerPage);
     } else {
       this.isSearchProductTable = false;
-      this.indexAcessProduct = [0, 1, 2, 3];
+      this.indexAcessProduct = Array.from({ length: this.productsPerPage }, (_, index) => index);;
       this.correspondingProducts = [];
     }
   }
@@ -200,14 +198,74 @@ export class MenuEmissionProductComponent {
   // goPayment
   showPaymentBox: boolean = false;
   showSelectProduct: boolean = true;
+  finishPayment: boolean = false;
+  optionBallStatus: number = 0;
 
   goPayment(goPayment: boolean) {
     if (this.arrayIn_boxCheckOutProducts.length > 0) {
       if (goPayment) {
         this.showPaymentBox = true;
+        if (this.showPaymentBox && this.optionSelect > 0) {
+          const priceTotalConvert = parseFloat(this.price_total.replace(',', '.'));
+          const discountSubConvert = parseFloat(this.discount_subtotal.replace(',', '.'));
+          const arrayProductID = this.arrayIn_boxCheckOutProducts.map((index: any) => this.productData[index].product_id);
+
+          const userData = {
+            owner_id: 1,
+            payment_method: this.optionSelect,
+            amount: priceTotalConvert,
+            discount: discountSubConvert,
+            arrayProductID: arrayProductID,
+            numberQuantity: this.numberQuantity
+          };
+
+          console.log(userData);
+
+          this.apiService.addPayment(userData)
+            .pipe(
+              catchError(error => {
+                return EMPTY;
+                // throw error;
+              })
+            )
+            .subscribe(response => {
+              if (response.status == "ok") {
+                this.finishPayment = true;
+
+                // back default
+                this.optionSelect = 0;
+                this.showSelectProduct = false;
+                this.showPaymentBox = false;
+                this.arrayIn_boxCheckOutProducts = [];
+                this.numberQuantity = [];
+                this.price_total = "0,00";
+                this.price_subtotal = "0,00";
+                this.discount_subtotal = "0,00";
+
+                this.optionBallStatus = 1;
+
+                setTimeout(() => {
+                  this.optionBallStatus = 2;
+                }, 900);
+            
+                setTimeout(() => {
+                  this.optionBallStatus = 3;
+                }, 1700);
+            
+                setTimeout(() => {
+                  this.optionBallStatus = 0;
+                  this.finishPayment = false;
+                }, 3000);
+              }
+            });
+        }
+
       } else {
+        this.optionSelect = 0;
         this.showPaymentBox = false;
       }
     }
   }
 }
+
+

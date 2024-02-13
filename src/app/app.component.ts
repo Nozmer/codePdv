@@ -24,7 +24,7 @@ export class AppComponent {
   }
 
   // change menus
-  selectMenu: number = 1;
+  selectMenu: number = 0;
   selectBox(boxIndex: number): void {
     this.selectMenu = boxIndex;
   };

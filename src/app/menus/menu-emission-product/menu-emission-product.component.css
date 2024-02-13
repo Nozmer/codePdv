@@ -81,7 +81,7 @@
     font-size: 18px;
 }
 
-#name_headerCheckOutProducts{
+#name_headerCheckOutProducts {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -298,11 +298,11 @@
     bottom: 2px;
 }
 
-#optionsPix_openOptionsSecondary h2{
+#optionsPix_openOptionsSecondary h2 {
     font-size: 12px;
 }
 
-#optionsPix_openOptionsSecondary img{
+#optionsPix_openOptionsSecondary img {
     width: 112px;
     height: 112px;
 }
@@ -316,4 +316,46 @@
     border-radius: 5px;
     border: 1.5px solid #E4E4E4;
     background: #FCFCFC;
+}
+
+#finishPayment {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background: #EDEDED;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px 0px;
+    flex-wrap: nowrap;
+}
+
+#finishPayment img {
+    width: 80px;
+    height: 80px;
+}
+
+#finishPayment h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(124, 125, 125, 1);
+}
+
+#statusLoading_finishPayment {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    gap: 10px;
+}
+
+.ball_statusLoading_finishPayment {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: rgba(124, 125, 125, 0.5);
+    transition: all 0.2s ease;
 }

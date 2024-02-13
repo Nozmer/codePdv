@@ -2,13 +2,16 @@
     <div id="boxInfoPeriodical">
         <div id="boxChangeInfoPeriodical">
             <div id="flexElementsChangeInfoPeriodical">
-                <div class="elementChangeInfoPeriodical">
+                <div [ngStyle]="(optionSelectPeriodical == 1) ? { 'background': '#D1D1D1' } : { 'background': 'transparent' }"
+                    (click)="changeInfoPeriodical(1)" class="elementChangeInfoPeriodical">
                     <p>Hoje</p>
                 </div>
-                <div class="elementChangeInfoPeriodical">
+                <div [ngStyle]="(optionSelectPeriodical == 2) ? { 'background': '#D1D1D1' } : { 'background': 'transparent' }"
+                    (click)="changeInfoPeriodical(2)" class="elementChangeInfoPeriodical">
                     <p>Semanalmente</p>
                 </div>
-                <div class="elementChangeInfoPeriodical">
+                <div [ngStyle]="(optionSelectPeriodical == 3) ? { 'background': '#D1D1D1' } : { 'background': 'transparent' }"
+                    (click)="changeInfoPeriodical(3)" class="elementChangeInfoPeriodical">
                     <p>Mensalmente</p>
                 </div>
             </div>
@@ -18,15 +21,14 @@
             <div id="flexCardsInfo">
                 <div id="cardNumberInfo">
                     <p>Vendas totais</p>
-                    <p>120</p>
+                    <p>{{lenghtSales}}</p>
                 </div>
 
                 <div id="box_flexCardsProducts">
                     <p>Produtos mais vendidos</p>
-                    <div id="flexCardsProducts">
-                        <app-element-flex-cards-products></app-element-flex-cards-products>
-                        <app-element-flex-cards-products></app-element-flex-cards-products>
-                        <app-element-flex-cards-products></app-element-flex-cards-products>
+                    <div *ngIf="showWhichID" id="flexCardsProducts">
+                        <app-element-flex-cards-products *ngFor="let number of showWhichID; let i = index" [productData]="productData"
+                            [quantityData]="showWhichQuantity[i]" [startIndex]="number"></app-element-flex-cards-products>
                     </div>
                 </div>
             </div>
@@ -35,6 +37,7 @@
                     <h2>Grafico de vendas</h2>
                 </div>
                 <div id="content_salesChart">
+                    <canvas #lineChart>{{chart}}</canvas>
                 </div>
             </div>
             <div id="infoAboutManageCashRegister">

@@ -25,7 +25,16 @@
                 <img src="../assets/seta.svg" alt="">
             </div>
         </div>
-        <div id="boxCheckOutProducts">
+        <div *ngIf="finishPayment" id="finishPayment">
+            <img src="../../../assets/check.svg" alt="">
+            <h2>Pagamento realizado</h2>
+            <div id="statusLoading_finishPayment">
+                <div [ngStyle]="(optionBallStatus == 1) ? { 'background-color': 'rgba(124, 125, 125, 1)' } : { 'background-color': 'rgba(124, 125, 125, 0.5)' }" class="ball_statusLoading_finishPayment"></div>
+                <div [ngStyle]="(optionBallStatus == 2) ? { 'background-color': 'rgba(124, 125, 125, 1)' } : { 'background-color': 'rgba(124, 125, 125, 0.5)' }" class="ball_statusLoading_finishPayment"></div>
+                <div [ngStyle]="(optionBallStatus == 3) ? { 'background-color': 'rgba(124, 125, 125, 1)' } : { 'background-color': 'rgba(124, 125, 125, 0.5)' }" class="ball_statusLoading_finishPayment"></div>
+            </div>
+        </div>
+        <div *ngIf="!finishPayment" id="boxCheckOutProducts">
             <div *ngIf="showPaymentBox" id="paymentBox">
                 <div id="header_paymentBox">
                     <h2>Escolha a forma de pagamento:</h2>
@@ -95,6 +104,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

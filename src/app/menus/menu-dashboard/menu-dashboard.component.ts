@@ -18,6 +18,7 @@ export class MenuDashboardComponent implements OnInit {
     // default
     this.showProductTable();
     this.requestSalesStatistics();
+    this.requestProductRecent();
   }
 
   // get productData
@@ -86,6 +87,30 @@ export class MenuDashboardComponent implements OnInit {
 
         this.createChart(); 
         this.changeInfoPeriodical(1);
+      });
+  }
+
+  recentActivities: any = []
+
+  requestProductRecent(){
+    const userData = {
+      user_id: 1,
+    };
+
+    this.apiService.productRecent(userData)
+      .pipe(
+        catchError(error => {
+          if (error.status == 401) {
+            console.log("produto não encontrado");
+          }
+          return EMPTY;
+          // throw error;
+        })
+      )
+      .subscribe(response => {
+        this.recentActivities = response.recentActivities;
+        console.log(this.recentActivities);
+        
       });
   }
 

@@ -85,19 +85,7 @@
                 <h2>Atividade recente</h2>
             </div>
             <div id="content_boxRecentActivity">
-                <div class="element_boxRecentActivity">
-                    <div class="imageInfo_boxRecentActivity">
-                        <img src="../../../assets/productBase.png" alt="">
-                        <div class="contentInfo_boxRecentActivity">
-                            <h2>Produto adicionado</h2>
-                            <h2>Leite integral</h2>
-                        </div>
-                    </div>
-                    <div class="date_boxRecentActivity">
-                        <h2>12/02/2020</h2>
-                        <h2>12:23</h2>
-                    </div>
-                </div>
+                <app-box-recent-activity *ngFor="let data of recentActivities" [data]="data"></app-box-recent-activity>
             </div>
         </div>
     </div>

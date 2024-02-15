@@ -53,4 +53,9 @@ export class ApiService {
     const url = `${this.apiUrl}/salesStatistics`;
     return this.http.post(url, data);
   }
+
+  productRecent(data: any): Observable<any> {
+    const url = `${this.apiUrl}/productRecent`;
+    return this.http.post(url, data);
+  }
 }

@@ -1,0 +1,81 @@
+:host {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.element_boxRecentActivity {
+    display: flex;
+    width: 100%;
+    padding: 14px 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: #F6F6F6;
+}
+
+.imageInfo_boxRecentActivity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1 0 0;
+}
+
+.imageInfo_boxRecentActivity img {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+.contentInfo_boxRecentActivity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+}
+
+.contentInfo_boxRecentActivity h2:first-child {
+    font-size: 14px;
+}
+
+.contentInfo_boxRecentActivity h2:last-child {
+    font-size: 12px;
+    color: #828282;
+}
+
+.date_boxRecentActivity {
+    display: flex;
+    padding: 10px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.date_boxRecentActivity h2 {
+    color: #B0B0B0;
+}
+
+.date_boxRecentActivity:first-child h2 {
+    font-size: 14px;
+}
+
+.date_boxRecentActivity:last-child h2 {
+    font-size: 12px;
+}
+
+.boxImagesIcons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+#iconImage{
+    width: 30px;
+    height: 30px;
+}

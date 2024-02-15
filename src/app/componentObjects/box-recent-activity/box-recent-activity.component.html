@@ -1,0 +1,17 @@
+<div *ngIf="whichActive != 0" class="element_boxRecentActivity">
+    <div class="imageInfo_boxRecentActivity">
+        <div class="boxImagesIcons">
+            <img *ngIf="whichActive == 1" src="../../../assets/imageProductsUsers/{{imageName}}" alt="">
+            <img *ngIf="whichActive == 2" id="iconImage" src="../../../assets/{{imageName}}" alt="">
+        </div>
+        <div class="contentInfo_boxRecentActivity">
+            <h2 *ngIf="whichActive == 1">Produto adicionado</h2>
+            <h2 *ngIf="whichActive == 2">Pagamento realizado</h2>
+            <h2>{{contentInfoText}}</h2>
+        </div>
+    </div>
+    <div class="date_boxRecentActivity">
+        <h2>{{formatData}}</h2>
+        <h2>{{formatHour}}</h2>
+    </div>
+</div>

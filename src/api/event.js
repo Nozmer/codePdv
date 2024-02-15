@@ -163,9 +163,62 @@ function createRouter(db) {
         );
     });
 
+    router.post('/productRecent', (req, res, next) => {
+        const owner_id = req.body.user_id;
+
+        const recentProductsQuery = `
+        SELECT *
+        FROM product
+        WHERE owner_id = ?
+        ORDER BY created_at DESC
+        LIMIT 10
+      `;
+
+        const recentPaymentsQuery = `
+        SELECT *
+        FROM payments
+        WHERE owner_id = ?
+        ORDER BY payment_date DESC
+        LIMIT 10
+      `;
+
+        const responseData = {
+            recentActivities: [],
+        };
+
+        // Consulta para obter os produtos mais recentes
+        db.query(recentProductsQuery, [owner_id], (productsError, productsResults) => {
+            if (productsError) {
+                console.error(productsError);
+                res.status(500).json({ status: 'error connecting to database' });
+            } else {
+                responseData.recentActivities = productsResults;
+
+                // Consulta para obter os pagamentos mais recentes
+                db.query(recentPaymentsQuery, [owner_id], (paymentsError, paymentsResults) => {
+                    if (paymentsError) {
+                        console.error(paymentsError);
+                        res.status(500).json({ status: 'error connecting to database' });
+                    } else {
+                        responseData.recentActivities = responseData.recentActivities.concat(paymentsResults);
+
+                        responseData.recentActivities.sort((a, b) => {
+                            const dateA = a.created_at || a.payment_date;
+                            const dateB = b.created_at || b.payment_date;
+                            return new Date(dateB) - new Date(dateA);
+                        });
+
+                        responseData.recentActivities = responseData.recentActivities.slice(0, 10);
+
+                        res.status(200).json(responseData);
+                    }
+                });
+            }
+        });
+    });
 
     router.post('/salesStatistics', (req, res, next) => {
-        const owner_id = req.body.user_id; // Certifique-se de que o owner_id é passado no corpo da solicitação
+        const owner_id = req.body.user_id;
 
         const responseData = {
             hourlySales: [],

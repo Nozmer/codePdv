@@ -28,6 +28,7 @@ import { TableRowTabComponent } from "./componentObjects/table-row-tab/table-row
 import { BoxNoFoundComponent } from './componentObjects/box-no-found/box-no-found.component';
 import { PopupDeleteProductComponent } from './componentObjects/popup-delete-product/popup-delete-product.component';
 import { LogMessagePanelComponent } from './componentObjects/log-message-panel/log-message-panel.component';
+import { BoxRecentActivityComponent } from './componentObjects/box-recent-activity/box-recent-activity.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { LogMessagePanelComponent } from './componentObjects/log-message-panel/l
     TableRowTabComponent,
     BoxNoFoundComponent,
     PopupDeleteProductComponent,
-    LogMessagePanelComponent
+    LogMessagePanelComponent,
+    BoxRecentActivityComponent
   ],
   imports: [
     JwtModule.forRoot({

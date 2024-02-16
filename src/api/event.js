@@ -254,10 +254,14 @@ function createRouter(db) {
                 console.error(hourlyError);
                 res.status(500).json({ status: 'error connecting to database' });
             } else {
-                responseData.hourlySales = fillEmptyHours(hourlyResults);
-                responseData.hourlySalesProducts = organizeResultsByQuantity(hourlyResults);
+                if (hourlyResults.salesCount > 0) {
+                    responseData.hourlySales = fillEmptyHours(hourlyResults);
+                    responseData.hourlySalesProducts = organizeResultsByQuantity(hourlyResults);
+                } else {
+                    responseData.hourlySales = undefined;
+                    responseData.hourlySalesProducts = undefined;
+                }
 
-                // Consulta para obter os IDs e quantidades dos produtos mais vendidos por dia da semana
                 const dailyQuery = `
                 SELECT
                     DAYOFWEEK(p.payment_date) AS dayOfWeek,
@@ -274,10 +278,14 @@ function createRouter(db) {
                         console.error(dailyError);
                         res.status(500).json({ status: 'error connecting to database' });
                     } else {
-                        responseData.dailySales = fillEmptyDays(dailyResults);
-                        responseData.dailySalesProducts = organizeResultsByQuantity(dailyResults);
+                        if (dailyResults.salesCount > 0) {
+                            responseData.dailySales = fillEmptyDays(dailyResults);
+                            responseData.dailySalesProducts = organizeResultsByQuantity(dailyResults);
+                        } else {
+                            responseData.dailySales = undefined;
+                            responseData.dailySalesProducts = undefined;
+                        }
 
-                        // Consulta para obter os IDs e quantidades dos produtos mais vendidos por mês
                         const monthlyQuery = `
                         SELECT
                             MONTH(p.payment_date) AS month,
@@ -294,8 +302,13 @@ function createRouter(db) {
                                 console.error(monthlyError);
                                 res.status(500).json({ status: 'error connecting to database' });
                             } else {
-                                responseData.monthlySales = fillEmptyMonths(monthlyResults);
-                                responseData.monthlySalesProducts = organizeResultsByQuantity(monthlyResults);
+                                if (monthlyResults.salesCount > 0) {
+                                    responseData.monthlySales = fillEmptyMonths(monthlyResults);
+                                    responseData.monthlySalesProducts = organizeResultsByQuantity(monthlyResults);
+                                } else {
+                                    responseData.monthlySales = undefined;
+                                    responseData.monthlySalesProducts = undefined;
+                                }
 
                                 res.status(200).json(responseData);
                             }

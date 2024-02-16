@@ -15,8 +15,9 @@
                     src="../../../assets/imageProductsUsers/{{nameImage.image_name}}" alt="">
             </div>
             <div id="InfoBoxLastProduct_headerInfo_manageProducts">
-                <h3>Caixa de leite</h3>
-                <h3>Ultimos produtos adicionados</h3>
+                <h3 *ngIf="productData.length > 0">{{productData.slice().reverse()[0].product_name}}</h3>
+                <h3 *ngIf="productData.length == 0">Não há produtos</h3>
+                <h3>Ultimo produto adicionado</h3>
             </div>
         </div>
     </div>

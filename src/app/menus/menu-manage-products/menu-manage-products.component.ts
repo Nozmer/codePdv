@@ -67,7 +67,7 @@ export class MenuManageProductsComponent {
 
   // show products in table
   public productData: any = [];
-  productDataLength: number = 1;
+  productDataLength: number = 0;
   currentPage: number = 1;
   productsPerPage: number = 4;
   indexAcessProduct: any;

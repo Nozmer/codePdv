@@ -74,25 +74,25 @@ export class MenuDashboardComponent implements OnInit {
       )
       .subscribe(response => {
         this.dataHourlySales = response.hourlySales.map((item: any) => item.salesCount);
-        this.hourlySalesProducts = response.hourlySalesProducts; 
-        this.lenghtHourlySales = this.dataHourlySales.reduce((acc: any, item:any) => acc + item, 0);
+        this.hourlySalesProducts = response.hourlySalesProducts;
+        this.lenghtHourlySales = this.dataHourlySales.reduce((acc: any, item: any) => acc + item, 0);
 
         this.dataDailySales = response.dailySales.map((item: any) => item.salesCount);
         this.dailySalesProducts = response.dailySalesProducts;
-        this.lenghtDailySales = this.dataDailySales.reduce((acc: any, item:any) => acc + item, 0);
+        this.lenghtDailySales = this.dataDailySales.reduce((acc: any, item: any) => acc + item, 0);
 
         this.dataMonthlySales = response.monthlySales.map((item: any) => item.salesCount);
         this.monthlySalesProducts = response.monthlySalesProducts;
-        this.lenghtMonthlySales = this.dataMonthlySales.reduce((acc: any, item:any) => acc + item, 0);
+        this.lenghtMonthlySales = this.dataMonthlySales.reduce((acc: any, item: any) => acc + item, 0);
 
-        this.createChart(); 
+        this.createChart();
         this.changeInfoPeriodical(1);
       });
   }
 
   recentActivities: any = []
 
-  requestProductRecent(){
+  requestProductRecent() {
     const userData = {
       user_id: 1,
     };
@@ -109,8 +109,6 @@ export class MenuDashboardComponent implements OnInit {
       )
       .subscribe(response => {
         this.recentActivities = response.recentActivities;
-        console.log(this.recentActivities);
-        
       });
   }
 
@@ -151,11 +149,11 @@ export class MenuDashboardComponent implements OnInit {
   showWhichID: any = [];
   showWhichQuantity: any = [];
 
-  sendTopSellingProducts(showWhich: any){
+  sendTopSellingProducts(showWhich: any) {
     if (showWhich.topProductIDs) {
       this.showWhichID = showWhich.topProductIDs.slice(0, 3);
       this.showWhichQuantity = showWhich.topProductQuantities.slice(0, 3);
-    } else{
+    } else {
       this.showWhichID = [];
       this.showWhichQuantity = [];
     }

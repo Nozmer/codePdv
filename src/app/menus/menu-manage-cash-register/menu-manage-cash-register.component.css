@@ -80,7 +80,7 @@
     background: #F9F9F9;
 }
 
-.box_content_boxShowCashRegisters.isSelect{
+.box_content_boxShowCashRegisters.isSelect {
     background: #F9F9F9;
 }
 
@@ -92,7 +92,7 @@
     flex: 1 0 0;
 }
 
-#header_infoAboutTab h1:first-child{
+#header_infoAboutTab h1:first-child {
     font-size: 14px;
 }
 
@@ -112,6 +112,109 @@
 .nameBox_content_boxShowCashRegisters img {
     width: 16px;
     height: 16px;
+}
+
+#listBoxShowCashRegisters {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    align-self: stretch;
+}
+
+#addNewCashRegister {
+    border-radius: 12px;
+    background-color: rgba(249, 249, 249, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+    overflow: auto;
+}
+
+#header_addNewCashRegister {
+    background-color: rgba(255, 254, 255, 1);
+    display: flex;
+    align-self: stretch;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+}
+
+#icon_header_addNewCashRegister {
+    border-radius: 6px;
+    background-color: rgba(237, 236, 236, 1);
+    display: flex;
+    padding: 5px 8px;
+}
+
+#icon_header_addNewCashRegister img {
+    width: 18px;
+    height: 18px;
+}
+
+#header_addNewCashRegister input {
+    display: flex;
+    align-self: stretch;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(237, 236, 236, 1);
+}
+
+#content_addNewCashRegister {
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px;
+}
+
+.inputs_content_addNewCashRegister {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.inputs_content_addNewCashRegister h2 {
+    font-size: 13px;
+    color: rgba(106, 106, 106, 1);
+}
+
+.inputs_content_addNewCashRegister input {
+    display: flex;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 254, 1);
+    border: 1px solid rgba(237, 236, 236, 1);
+    padding: 10px 12px;
+}
+
+#bottom_content_addNewCashRegister {
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: rgba(226, 226, 226, 0.5);
+    border: 1px solid rgba(226, 226, 226, 1);
+    display: flex;
+    align-self: stretch;
+    justify-content: center;
+    padding: 10px 0px;
+    transition: all 0.2s ease;
+}
+
+#bottom_content_addNewCashRegister:hover {
+    background-color: rgba(226, 226, 226, 1);
+}
+
+#bottom_content_addNewCashRegister h1 {
+    font-size: 13px;
+    color: rgba(82, 82, 82, 1);
+}
+
+#content_addNewCashRegister h3{
+    color: rgba(106, 106, 106, 1);
+    -webkit-line-clamp: 2;
+    font-size: 11px;
 }
 
 #box_infoAboutCashRegister {

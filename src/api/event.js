@@ -86,7 +86,7 @@ function createRouter(db) {
                     res.status(500).json({ status: 'error connection database' });
                 } else {
                     if (results.length === 0) {
-                        res.status(401).json({ status: 'error', message: 'products no found' });
+                        res.status(401).json({ status: 'error', message: 'No found product' });
                     } else {
                         const products = results;
                         res.status(200).json({ status: 'ok', products: products });
@@ -112,6 +112,63 @@ function createRouter(db) {
                     res.status(500).json({ status: 'error connection database' });
                 } else {
                     res.status(200).json({ status: 'ok' });
+                }
+            }
+        );
+    });
+
+    router.post('/addCashRegister', (req, res, next) => {
+        const userData = req.body;
+
+        bcrypt.hash(userData.pass, 12, (hashError, hashedPassword) => {
+            if (hashError) {
+                console.error(hashError);
+                res.status(500).json({ status: 'error bcrypt' });
+            } else {
+                db.query(
+                    'SELECT email FROM login WHERE user_id = ?',
+                    [userData.user_id],
+                    (error, result) => {
+                        if (error) {
+                            console.error(error);
+                            res.status(500).json({ status: 'error connection database' });
+                        } else {
+                            db.query(
+                                'INSERT INTO cashRegister (owner_id, email, name, password) VALUES (?, ?, ?, ?)',
+                                [userData.user_id, result[0].email, userData.name, hashedPassword],
+                                (error, results) => {
+                                    if (error) {
+                                        console.error(error);
+                                        res.status(500).json({ status: 'error connection database' });
+                                    } else {
+                                        res.status(200).json({ status: 'ok' });
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    });
+
+    router.post('/showCashRegisters', (req, res, next) => {
+        const userData = req.body;
+
+        db.query(
+            'SELECT * FROM cashRegister WHERE owner_id = ?',
+            [userData.user_id],
+            (error, results) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).json({ status: 'error connection database' });
+                } else {
+                    if (results.length === 0) {
+                        res.status(401).json({ status: 'error', message: 'No found cashRegister' });
+                    } else{
+                        const cashRegisters = results;
+                        res.status(200).json({ status: 'ok', cashRegisters: cashRegisters });
+                    }
                 }
             }
         );

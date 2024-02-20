@@ -3,49 +3,41 @@
         <div id="boxShowCashRegisters">
             <div id="header_boxShowCashRegisters">
                 <h2>Caixas</h2>
-                <div id="boxAddCashregisters">
+                <div *ngIf="showListCashRegister" (click)="changeAddToList(false)" id="boxAddCashregisters">
                     <h3>Adicionar caixa</h3>
+                </div>
+                <div *ngIf="!showListCashRegister" (click)="changeAddToList(true)" id="boxAddCashregisters">
+                    <h3>Voltar para seus caixas</h3>
                 </div>
             </div>
 
             <div id="content_boxShowCashRegisters">
-                <div id="addNewCashRegister">
+                <div *ngIf="!showListCashRegister" id="addNewCashRegister">
                     <div id="header_addNewCashRegister">
                         <div id="icon_header_addNewCashRegister">
                             <img src="../../../assets/cashRegister_icon.svg" alt="">
                         </div>
-                        <input type="text" placeholder="Nome do caixa">
+                        <input type="text" [(ngModel)]="nameCashRegister" [ngStyle]="{ 'border': borderInputName }"
+                            placeholder="Nome do caixa">
                     </div>
                     <div id="content_addNewCashRegister">
                         <div class="inputs_content_addNewCashRegister">
                             <h2>Defina a senha do caixa:</h2>
-                            <input type="password" placeholder="*******">
+                            <input [(ngModel)]="passCashRegister" [ngStyle]="{ 'border': borderinputPass }"
+                                type="password" placeholder="*******">
                         </div>
-                        <div id="bottom_content_addNewCashRegister">
-                            <h1>Criar caixa</h1>
+                        <div (click)="addCashRegister()" id="bottom_content_addNewCashRegister">
+                            <h1 *ngIf="!showfinishCreateCash && !showLoadingCreateCash">Criar caixa</h1>
+                            <img *ngIf="showLoadingCreateCash" src="../../../assets/load.gif" alt="">
+                            <h1 *ngIf="showfinishCreateCash && !showLoadingCreateCash">Caixa criado!</h1>
                         </div>
                         <h3>Será criado um novo login com seu Email para este caixa.</h3>
                     </div>
                 </div>
 
-                <div style="display: none;" id="listBoxShowCashRegisters">
-                    <div [class.isSelect]="boxSelectCashRegister == 0" (click)="changeBoxSelectCashRegister(0)"
-                        class="box_content_boxShowCashRegisters">
-                        <div class="nameBox_content_boxShowCashRegisters">
-                            <img src="../assets/cashRegister_icon.svg" alt="">
-                            <h3>Caixa 1</h3>
-                        </div>
-                        <app-actions-table></app-actions-table>
-                    </div>
-
-                    <div [class.isSelect]="boxSelectCashRegister == 1" (click)="changeBoxSelectCashRegister(1)"
-                        class="box_content_boxShowCashRegisters">
-                        <div class="nameBox_content_boxShowCashRegisters">
-                            <img src="../assets/cashRegister_icon.svg" alt="">
-                            <h3>Caixa 2</h3>
-                        </div>
-                        <app-actions-table></app-actions-table>
-                    </div>
+                <div *ngIf="showListCashRegister && arrayCashRegisters.length > 0" id="listBoxShowCashRegisters">
+                    <app-box-content-box-show-cash-registers *ngFor="let registers of arrayCashRegisters"
+                        [dataRegister]="registers"></app-box-content-box-show-cash-registers>
                 </div>
             </div>
         </div>

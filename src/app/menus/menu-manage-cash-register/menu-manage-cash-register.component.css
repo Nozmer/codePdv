@@ -54,35 +54,6 @@
     font-size: 12px;
 }
 
-#content_boxShowCashRegisters {
-    display: flex;
-    padding: 0px 24px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    align-self: stretch;
-}
-
-.box_content_boxShowCashRegisters {
-    cursor: pointer;
-    display: flex;
-    padding: 12px 20px;
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-    border-radius: 10px;
-    border: 1px solid #E4E4E4;
-    background: transparent;
-    transition: background 0.2s ease;
-}
-
-.box_content_boxShowCashRegisters:hover {
-    background: #F9F9F9;
-}
-
-.box_content_boxShowCashRegisters.isSelect {
-    background: #F9F9F9;
-}
 
 #header_infoAboutTab {
     display: flex;
@@ -112,6 +83,15 @@
 .nameBox_content_boxShowCashRegisters img {
     width: 16px;
     height: 16px;
+}
+
+#content_boxShowCashRegisters {
+    display: flex;
+    padding: 0px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    align-self: stretch;
 }
 
 #listBoxShowCashRegisters {
@@ -209,6 +189,11 @@
 #bottom_content_addNewCashRegister h1 {
     font-size: 13px;
     color: rgba(82, 82, 82, 1);
+}
+
+#bottom_content_addNewCashRegister img{
+    width: 18px;
+    height: 18px;
 }
 
 #content_addNewCashRegister h3{

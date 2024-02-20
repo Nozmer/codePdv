@@ -29,6 +29,7 @@ import { BoxNoFoundComponent } from './componentObjects/box-no-found/box-no-foun
 import { PopupDeleteProductComponent } from './componentObjects/popup-delete-product/popup-delete-product.component';
 import { LogMessagePanelComponent } from './componentObjects/log-message-panel/log-message-panel.component';
 import { BoxRecentActivityComponent } from './componentObjects/box-recent-activity/box-recent-activity.component';
+import { BoxContentBoxShowCashRegistersComponent } from './componentObjects/box-content-box-show-cash-registers/box-content-box-show-cash-registers.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { BoxRecentActivityComponent } from './componentObjects/box-recent-activi
     BoxNoFoundComponent,
     PopupDeleteProductComponent,
     LogMessagePanelComponent,
-    BoxRecentActivityComponent
+    BoxRecentActivityComponent,
+    BoxContentBoxShowCashRegistersComponent
   ],
   imports: [
     JwtModule.forRoot({

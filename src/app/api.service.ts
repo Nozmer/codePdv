@@ -58,4 +58,15 @@ export class ApiService {
     const url = `${this.apiUrl}/productRecent`;
     return this.http.post(url, data);
   }
+
+  // menu: manageCashRegister
+  addCashRegister(data: any): Observable<any> {
+    const url = `${this.apiUrl}/addCashRegister`;
+    return this.http.post(url, data);
+  }
+
+  showCashRegisters(data: any): Observable<any> {
+    const url = `${this.apiUrl}/showCashRegisters`;
+    return this.http.post(url, data);
+  }
 }

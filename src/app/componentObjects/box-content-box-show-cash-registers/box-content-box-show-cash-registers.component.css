@@ -1,0 +1,38 @@
+.box_content_boxShowCashRegisters {
+    cursor: pointer;
+    display: flex;
+    padding: 12px 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    background: transparent;
+    transition: background 0.2s ease;
+}
+
+.box_content_boxShowCashRegisters:hover {
+    background: #F9F9F9;
+}
+
+.box_content_boxShowCashRegisters.isSelect {
+    background: #F9F9F9;
+}
+
+.nameBox_content_boxShowCashRegisters {
+    display: flex;
+    padding: 8px 10px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+.nameBox_content_boxShowCashRegisters h3 {
+    font-size: 12px;
+}
+
+.nameBox_content_boxShowCashRegisters img {
+    width: 16px;
+    height: 16px;
+}

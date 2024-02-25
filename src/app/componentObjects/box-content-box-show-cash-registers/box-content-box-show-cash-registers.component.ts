@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-box-content-box-show-cash-registers',
@@ -10,9 +10,10 @@ export class BoxContentBoxShowCashRegistersComponent {
 
   // init
   name: string = "";
+  @Input() selectBox = false;
 
   ngOnInit(): void {
     this.name = this.dataRegister.name;
+    this.selectBox = this.dataRegister.selectBox;
   }
-
 }

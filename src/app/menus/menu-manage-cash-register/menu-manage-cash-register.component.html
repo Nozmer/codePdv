@@ -27,22 +27,24 @@
                                 type="password" placeholder="*******">
                         </div>
                         <div (click)="addCashRegister()" id="bottom_content_addNewCashRegister">
-                            <h1 *ngIf="!showfinishCreateCash && !showLoadingCreateCash">Criar caixa</h1>
+                            <h1 *ngIf="!showfinishCreateCash && !showLoadingCreateCash && !showErroMultipleCash">Criar caixa</h1>
                             <img *ngIf="showLoadingCreateCash" src="../../../assets/load.gif" alt="">
                             <h1 *ngIf="showfinishCreateCash && !showLoadingCreateCash">Caixa criado!</h1>
+                            <h1 *ngIf="showErroMultipleCash && !showLoadingCreateCash">Não utilize sua senha ou de outros caixas</h1>
                         </div>
                         <h3>Será criado um novo login com seu Email para este caixa.</h3>
                     </div>
                 </div>
 
                 <div *ngIf="showListCashRegister && arrayCashRegisters.length > 0" id="listBoxShowCashRegisters">
-                    <app-box-content-box-show-cash-registers *ngFor="let registers of arrayCashRegisters"
-                        [dataRegister]="registers"></app-box-content-box-show-cash-registers>
+                    <app-box-content-box-show-cash-registers *ngFor="let registers of arrayCashRegisters; let i = index"
+                        [dataRegister]="registers"
+                        [selectBox]="registers.selectBox" (click)="changeSelectBox(i)"></app-box-content-box-show-cash-registers>
                 </div>
             </div>
         </div>
 
-        <div id="box_infoAboutCashRegister">
+        <div *ngIf="cashRegisterSelect" id="box_infoAboutCashRegister">
             <div id="header_box_infoAboutCashRegister">
                 <div *ngIf="selectTab == 1" (click)="changeTabsEdit(0)" class="backBotton">
                     <img src="../assets/seta.svg" alt="">
@@ -52,7 +54,7 @@
                     <h1 *ngIf="selectTab == 1">Configurações de</h1>
                     <div class="nameBox_content_boxShowCashRegisters">
                         <img src="../assets/cashRegister_icon.svg" alt="">
-                        <h3>Caixa {{boxSelectCashRegister + 1}}</h3>
+                        <h3>{{cashRegisterSelect.name}}</h3>
                     </div>
                 </div>
             </div>

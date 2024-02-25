@@ -15,11 +15,11 @@ export class AppComponent {
   // change login to panel
   isLoggedIn: boolean = true;
 
-  onUserLoggedIn(loggedIn: boolean) {
-    this.isLoggedIn = loggedIn;
+  onUserLoggedIn(loggedIn: any) {
+    this.isLoggedIn = loggedIn.isLoggedIn;
+    const userId = this.authService.getUserId();
 
-    // const userId = this.authService.getUserId();
-    const userId = 1;
+    // const userId = 1;
     console.log(userId);
   }
 

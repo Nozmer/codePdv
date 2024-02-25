@@ -43,6 +43,7 @@ export class MenuManageCashRegisterComponent {
   }
 
   // cashRegister
+  cashRegisterSelect: any;
   showListCashRegister: boolean = true;
 
   changeAddToList(select: boolean) {
@@ -94,26 +95,36 @@ export class MenuManageCashRegisterComponent {
 
   showfinishCreateCash: boolean = false;
   showLoadingCreateCash: boolean = false;
+  showErroMultipleCash: boolean = false;
   requestNewCashRegister(userData: any) {
+    this.showLoadingCreateCash = true;
     this.inAnimationOrLoading = true;
 
     this.apiService.addCashRegister(userData)
       .pipe(
         catchError(error => {
+          this.showLoadingCreateCash = false;
+          this.showErroMultipleCash = true;
+
           if (error.status == 401) {
-            console.log("produto não encontrado");
+            setTimeout(() => {
+              this.showErroMultipleCash = false;
+              this.inAnimationOrLoading = false;
+            }, 2000);
           }
           return EMPTY;
           // throw error;
         })
       )
       .subscribe(response => {
-        this.inAnimationOrLoading = false;
+        this.showLoadingCreateCash = false;
         this.showfinishCreateCash = true;
         setTimeout(() => {
+          this.requestShowCashRegisters();
           this.showListCashRegister = true;
           this.nameCashRegister = "";
           this.passCashRegister = "";
+          this.inAnimationOrLoading = false;
           this.showfinishCreateCash = false;
         }, 2000);
       });
@@ -124,7 +135,7 @@ export class MenuManageCashRegisterComponent {
     const userData = {
       user_id: 1,
     };
-    
+
     this.apiService.showCashRegisters(userData)
       .pipe(
         catchError(error => {
@@ -136,7 +147,22 @@ export class MenuManageCashRegisterComponent {
         })
       )
       .subscribe(response => {
-        this.arrayCashRegisters = response.cashRegisters;
+        this.arrayCashRegisters = response.cashRegisters.map((register: any) => {
+          return { ...register, selectBox: false };
+        });
+
+        // default
+        this.arrayCashRegisters[0].selectBox = true;
+        this.cashRegisterSelect = this.arrayCashRegisters[0];
       });
+  }
+
+  changeSelectBox(indexArray: any) {
+    this.arrayCashRegisters.forEach((element: any) => {
+      element.selectBox = false;
+    });
+
+    this.arrayCashRegisters[indexArray].selectBox = true;
+    this.cashRegisterSelect = this.arrayCashRegisters[indexArray];
   }
 }

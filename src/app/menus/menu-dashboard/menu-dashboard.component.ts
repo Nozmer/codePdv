@@ -73,17 +73,25 @@ export class MenuDashboardComponent implements OnInit {
         })
       )
       .subscribe(response => {
-        this.dataHourlySales = response.hourlySales.map((item: any) => item.salesCount);
-        this.hourlySalesProducts = response.hourlySalesProducts;
-        this.lenghtHourlySales = this.dataHourlySales.reduce((acc: any, item: any) => acc + item, 0);
+        console.log(response.hourlySales);
 
-        this.dataDailySales = response.dailySales.map((item: any) => item.salesCount);
-        this.dailySalesProducts = response.dailySalesProducts;
-        this.lenghtDailySales = this.dataDailySales.reduce((acc: any, item: any) => acc + item, 0);
+        if (response.hourlySales) {
+          this.dataHourlySales = response.hourlySales.map((item: any) => item.salesCount);
+          this.hourlySalesProducts = response.hourlySalesProducts;
+          this.lenghtHourlySales = this.dataHourlySales.reduce((acc: any, item: any) => acc + item, 0);
+        }
 
-        this.dataMonthlySales = response.monthlySales.map((item: any) => item.salesCount);
-        this.monthlySalesProducts = response.monthlySalesProducts;
-        this.lenghtMonthlySales = this.dataMonthlySales.reduce((acc: any, item: any) => acc + item, 0);
+        if (response.dailySales) {
+          this.dataDailySales = response.dailySales.map((item: any) => item.salesCount);
+          this.dailySalesProducts = response.dailySalesProducts;
+          this.lenghtDailySales = this.dataDailySales.reduce((acc: any, item: any) => acc + item, 0);
+        }
+
+        if (response.monthlySales) {
+          this.dataMonthlySales = response.monthlySales.map((item: any) => item.salesCount);
+          this.monthlySalesProducts = response.monthlySalesProducts;
+          this.lenghtMonthlySales = this.dataMonthlySales.reduce((acc: any, item: any) => acc + item, 0);
+        }
 
         this.createChart();
         this.changeInfoPeriodical(1);

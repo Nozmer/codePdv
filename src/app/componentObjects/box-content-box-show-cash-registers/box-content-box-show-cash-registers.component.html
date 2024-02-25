@@ -1,9 +1,7 @@
-<div class="box_content_boxShowCashRegisters">
+<div [class.isSelect]="selectBox" class="box_content_boxShowCashRegisters">
     <div class="nameBox_content_boxShowCashRegisters">
         <img src="../assets/cashRegister_icon.svg" alt="">
         <h3>{{name}}</h3>
     </div>
     <app-actions-table></app-actions-table>
 </div>
-
-<!-- [class.isSelect]="boxSelectCashRegister == 0" (click)="changeBoxSelectCashRegister(0)" -->

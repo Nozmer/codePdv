@@ -2,6 +2,8 @@ import { Component, NgZone, Output, EventEmitter } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthService } from '../auth.service';
 import { catchError } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class LoginComponent {
   constructor(private apiService: ApiService, private ngZone: NgZone, private authService: AuthService) { }
-  @Output() userLoggedIn: EventEmitter<boolean> = new EventEmitter<boolean>();
+  
+  @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
 
   // changeTabLoginRegister
   tabLoginRegister: number = 0;
@@ -133,17 +136,17 @@ export class LoginComponent {
           .pipe(
             catchError(error => {
               this.showMessage("login", "error");
-              console.error('Error registering user:', error);
-              throw error;
+              console.log(error);
+              return EMPTY;
             })
           )
           .subscribe(response => {
-            this.showMessage("login", "waitResponse");
-
-            this.authService.setToken(response.token);
-            this.userLoggedIn.emit(true);
-
             this.showMessage("login", "ok");
+            
+            console.log(response);
+            
+            // this.authService.setToken(response.token);
+            // this.userLoggedIn.emit({isLoggedIn: true, isCashRegister: response.isCashRegister});
           });
 
       } else {

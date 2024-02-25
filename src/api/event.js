@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const { log } = require('@angular-devkit/build-angular/src/builders/ssr-dev-server');
+const util = require('util');
 
 // create store image
 const storage = multer.diskStorage({
@@ -19,6 +20,7 @@ const upload = multer({ storage: storage });
 // router
 function createRouter(db) {
     const router = express.Router();
+    const dbQueryAsync = util.promisify(db.query).bind(db);
 
     router.post('/register', (req, res, next) => {
         bcrypt.hash(req.body.password, 12, (hashError, hashedPassword) => {
@@ -44,36 +46,36 @@ function createRouter(db) {
     });
 
     router.post('/login', (req, res, next) => {
-        db.query(
-            'SELECT * FROM login WHERE email = ?',
-            [req.body.email],
-            (error, results) => {
-                if (error) {
-                    console.error(error);
-                    res.status(500).json({ status: 'error connection database' });
+        const email = req.body.email;
+        const password = req.body.password;
+
+        // Check login and cashRegister in a single query
+        db.query('SELECT * FROM login LEFT JOIN cashRegister ON login.email = cashRegister.email WHERE login.email = ?', [email], (error, result) => {
+            if (error) {
+                console.error(error);
+                res.status(500).json({ status: 'error' });
+            } else {
+                if (result.length === 0) {
+                    res.status(401).json({ status: 'error', message: 'incorrect password' });
                 } else {
-                    if (results.length === 0) {
-                        res.status(401).json({ status: 'error', message: 'user no found' });
-                    } else {
-                        const user = results[0];
-                        bcrypt.compare(req.body.password, user.password, (bcryptError, bcryptResult) => {
-                            if (bcryptError) {
-                                console.error(bcryptError);
-                                res.status(500).json({ status: 'error bcrypt' });
+                    const user = result[0];
+
+                    bcrypt.compare(password, user.password, (bcryptError, bcryptResult) => {
+                        if (bcryptError) {
+                            res.status(500).json({ status: 'error bcrypt' });
+                        } else {
+                            if (bcryptResult) {
+                                const token = jwt.sign({ user_id: user.user_id }, 'seu_segredo_secreto', { expiresIn: '1h' });
+                                const isCashRegister = user.hasOwnProperty('cashRegister_id');
+                                res.status(200).json({ status: 'ok', token, isCashRegister });
                             } else {
-                                if (bcryptResult) {
-                                    // Gera um token
-                                    const token = jwt.sign({ user_id: user.user_id }, 'seu_segredo_secreto', { expiresIn: '1h' });
-                                    res.status(200).json({ status: 'ok', token: token });
-                                } else {
-                                    res.status(401).json({ status: 'error', message: 'incorrect password' });
-                                }
+                                res.status(401).json({ status: 'error', message: 'incorrect password' });
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
-        );
+        });
     });
 
     router.post('/showProductTable', (req, res, next) => {
@@ -120,36 +122,61 @@ function createRouter(db) {
     router.post('/addCashRegister', (req, res, next) => {
         const userData = req.body;
 
-        bcrypt.hash(userData.pass, 12, (hashError, hashedPassword) => {
-            if (hashError) {
-                console.error(hashError);
-                res.status(500).json({ status: 'error bcrypt' });
-            } else {
-                db.query(
-                    'SELECT email FROM login WHERE user_id = ?',
-                    [userData.user_id],
-                    (error, result) => {
-                        if (error) {
-                            console.error(error);
-                            res.status(500).json({ status: 'error connection database' });
-                        } else {
-                            db.query(
-                                'INSERT INTO cashRegister (owner_id, email, name, password) VALUES (?, ?, ?, ?)',
-                                [userData.user_id, result[0].email, userData.name, hashedPassword],
-                                (error, results) => {
-                                    if (error) {
-                                        console.error(error);
-                                        res.status(500).json({ status: 'error connection database' });
-                                    } else {
-                                        res.status(200).json({ status: 'ok' });
-                                    }
-                                }
-                            );
-                        }
-                    }
+        bcrypt.hash(userData.pass, 12, async (hashError, hashedPassword) => {
+            try {
+                if (hashError) {
+                    console.error(hashError);
+                    res.status(500).json({ status: 'error bcrypt' });
+                    return;
+                }
+
+                const result = await dbQueryAsync(
+                    'SELECT login.email AS login_email, login.password AS login_password, cashRegister.password AS cashRegister_password ' +
+                    'FROM login ' +
+                    'LEFT JOIN cashRegister ON login.email = cashRegister.email ' +
+                    'WHERE login.user_id = ?',
+                    [userData.user_id]
                 );
+
+                const login_password = result[0].login_password;  
+                const loginPasswordMatch = await bcrypt.compare(userData.pass, login_password);
+                const cashRegister_password = result[0].cashRegister_password;
+                
+                if (cashRegister_password != null) {
+                    const cashRegisterPasswordMatch = await bcrypt.compare(userData.pass, cashRegister_password);
+
+                    if (loginPasswordMatch || cashRegisterPasswordMatch) {
+                        res.status(401).json({ status: 'error', message: 'password cannot be the same as your password or that of another cashier' });
+                    } else {
+                        insertTableCashRegister(userData.user_id, result[0].login_email, userData.name, hashedPassword);
+                    }
+                } else{
+                    if (loginPasswordMatch) {
+                        res.status(401).json({ status: 'error', message: 'password cannot be the same as your password or that of another cashier' });
+                    } else {
+                        insertTableCashRegister(userData.user_id, result[0].login_email, userData.name, hashedPassword);
+                    }
+                }
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ status: 'error' });
             }
         });
+
+        async function insertTableCashRegister(owner_id, email, name, password) {
+            try {
+                await db.query(
+                    'INSERT INTO cashRegister (owner_id, email, name, password) VALUES (?, ?, ?, ?)',
+                    [owner_id, email, name, password],
+                );
+
+                res.status(200).json({ status: 'ok' });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ status: 'error' });
+            }
+        }
     });
 
     router.post('/showCashRegisters', (req, res, next) => {
@@ -165,7 +192,7 @@ function createRouter(db) {
                 } else {
                     if (results.length === 0) {
                         res.status(401).json({ status: 'error', message: 'No found cashRegister' });
-                    } else{
+                    } else {
                         const cashRegisters = results;
                         res.status(200).json({ status: 'ok', cashRegisters: cashRegisters });
                     }
@@ -306,12 +333,12 @@ function createRouter(db) {
             WHERE p.owner_id = ? AND DATE(p.payment_date) = CURDATE() GROUP BY hour
         `;
 
-        db.query(hourlyQuery, [owner_id], (hourlyError, hourlyResults) => {
+        db.query(hourlyQuery, owner_id, (hourlyError, hourlyResults) => {
             if (hourlyError) {
                 console.error(hourlyError);
                 res.status(500).json({ status: 'error connecting to database' });
             } else {
-                if (hourlyResults.salesCount > 0) {
+                if (hourlyResults.length > 0) {
                     responseData.hourlySales = fillEmptyHours(hourlyResults);
                     responseData.hourlySalesProducts = organizeResultsByQuantity(hourlyResults);
                 } else {
@@ -330,12 +357,12 @@ function createRouter(db) {
                     WHERE p.owner_id = ? AND DATE(p.payment_date) GROUP BY dayOfWeek
                 `;
 
-                db.query(dailyQuery, [owner_id], (dailyError, dailyResults) => {
+                db.query(dailyQuery, owner_id, (dailyError, dailyResults) => {
                     if (dailyError) {
                         console.error(dailyError);
                         res.status(500).json({ status: 'error connecting to database' });
                     } else {
-                        if (dailyResults.salesCount > 0) {
+                        if (dailyResults.length > 0) {
                             responseData.dailySales = fillEmptyDays(dailyResults);
                             responseData.dailySalesProducts = organizeResultsByQuantity(dailyResults);
                         } else {
@@ -354,12 +381,12 @@ function createRouter(db) {
                             WHERE p.owner_id = ? AND YEAR(p.payment_date) = YEAR(CURDATE())
                         `;
 
-                        db.query(monthlyQuery, [owner_id], (monthlyError, monthlyResults) => {
+                        db.query(monthlyQuery, owner_id, (monthlyError, monthlyResults) => {
                             if (monthlyError) {
                                 console.error(monthlyError);
                                 res.status(500).json({ status: 'error connecting to database' });
                             } else {
-                                if (monthlyResults.salesCount > 0) {
+                                if (monthlyResults.length > 0) {
                                     responseData.monthlySales = fillEmptyMonths(monthlyResults);
                                     responseData.monthlySalesProducts = organizeResultsByQuantity(monthlyResults);
                                 } else {

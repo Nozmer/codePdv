@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
-const { log } = require('@angular-devkit/build-angular/src/builders/ssr-dev-server');
 const util = require('util');
 
 // create store image
@@ -49,33 +48,52 @@ function createRouter(db) {
         const email = req.body.email;
         const password = req.body.password;
 
-        // Check login and cashRegister in a single query
-        db.query('SELECT * FROM login LEFT JOIN cashRegister ON login.email = cashRegister.email WHERE login.email = ?', [email], (error, result) => {
-            if (error) {
-                console.error(error);
-                res.status(500).json({ status: 'error' });
-            } else {
+        async function checkPassword() {
+            try {
+                const result = await dbQueryAsync(
+                    'SELECT login.email AS login_email, login.password AS login_password, login.user_id AS login_userId, cashRegister.password AS cashRegister_password, cashRegister.permissions AS cashRegister_permissions, cashRegister.cashRegister_id AS cashRegister_id FROM login LEFT JOIN cashRegister ON login.email = cashRegister.email WHERE login.email = ?',
+                    [email]
+                );
+
                 if (result.length === 0) {
                     res.status(401).json({ status: 'error', message: 'incorrect password' });
                 } else {
-                    const user = result[0];
+                    // check first password user
+                    const passwordUserMatch = await bcrypt.compare(password, result[0].login_password);
 
-                    bcrypt.compare(password, user.password, (bcryptError, bcryptResult) => {
-                        if (bcryptError) {
-                            res.status(500).json({ status: 'error bcrypt' });
-                        } else {
-                            if (bcryptResult) {
-                                const token = jwt.sign({ user_id: user.user_id }, 'seu_segredo_secreto', { expiresIn: '1h' });
-                                const isCashRegister = user.hasOwnProperty('cashRegister_id');
-                                res.status(200).json({ status: 'ok', token, isCashRegister });
-                            } else {
-                                res.status(401).json({ status: 'error', message: 'incorrect password' });
+                    if (passwordUserMatch) {
+                        const token = jwt.sign({ owner_id: result[0].login_userId, isCashRegister_id: 0, permissions: "1,1,1,1" }, 'seu_segredo_secreto', { expiresIn: '1h' });
+                        res.status(200).json({ status: 'ok', token: token, cashRegister_id: 0 });
+                    } else {
+                        // check second password cashRegister
+                        let cashRegisterMatchFound = false;
+                        let indexCashRegisterMatchFound = null;
+
+                        for (const [index, element] of result.entries()) {
+                            const passwordCashRegisterMatch = await bcrypt.compare(password, element.cashRegister_password);
+
+                            if (passwordCashRegisterMatch) {
+                                cashRegisterMatchFound = true;
+                                indexCashRegisterMatchFound = index;
+                                break;
                             }
                         }
-                    });
+
+                        if (cashRegisterMatchFound) {
+                            const token = jwt.sign({ owner_id: result[0].login_userId, isCashRegister_id: result[indexCashRegisterMatchFound].cashRegister_id, permissions: result[indexCashRegisterMatchFound].cashRegister_permissions }, 'seu_segredo_secreto', { expiresIn: '1h' });
+                            res.status(200).json({ status: 'ok', token: token });
+                        } else {
+                            res.status(401).json({ status: 'error', message: 'incorrect password' });
+                        }
+                    }
                 }
+            } catch (error) {
+                console.error(error);
+                res.status(401).json({ status: 'error', message: 'internal server error' });
             }
-        });
+        }
+
+        checkPassword();
     });
 
     router.post('/showProductTable', (req, res, next) => {
@@ -138,10 +156,10 @@ function createRouter(db) {
                     [userData.user_id]
                 );
 
-                const login_password = result[0].login_password;  
+                const login_password = result[0].login_password;
                 const loginPasswordMatch = await bcrypt.compare(userData.pass, login_password);
                 const cashRegister_password = result[0].cashRegister_password;
-                
+
                 if (cashRegister_password != null) {
                     const cashRegisterPasswordMatch = await bcrypt.compare(userData.pass, cashRegister_password);
 
@@ -150,7 +168,7 @@ function createRouter(db) {
                     } else {
                         insertTableCashRegister(userData.user_id, result[0].login_email, userData.name, hashedPassword);
                     }
-                } else{
+                } else {
                     if (loginPasswordMatch) {
                         res.status(401).json({ status: 'error', message: 'password cannot be the same as your password or that of another cashier' });
                     } else {
@@ -201,12 +219,61 @@ function createRouter(db) {
         );
     });
 
+    router.post('/infoAboutCashRegister', (req, res, next) => {
+        const owner_id = req.body.user_id;
+        const cashRegister_id = req.body.cashRegisterSelect;
+
+        const responseData = {
+            data: [],
+            productsSold: [],
+            idProducts: [],
+            totalAmountProducts: [],
+            quantitityProducts: [],
+        };
+
+        async function requestInfo() {
+            try {
+                const result = await dbQueryAsync(
+                    `SELECT p.payment_date AS data,
+                    COUNT(*) AS productsSold,
+                    GROUP_CONCAT(pp.product_id) AS idProducts,
+                    p.amount AS totalAmountProducts,
+                    GROUP_CONCAT(pp.quantity) AS quantitityProducts
+                    FROM payments p
+                    JOIN paymentProducts pp ON p.payment_id = pp.payment_id
+                    WHERE p.owner_id = ? AND p.isCashRegister_id = ? AND DATE(p.payment_date) = CURDATE() GROUP BY data`,
+                    [owner_id, cashRegister_id]
+                );
+
+                if (result.length === 0) {
+                    res.status(401).json({ status: 'error', message: 'no found sales on cashRegister' });
+                } else {
+                    
+                    result.forEach(product => {
+                        responseData.data.push(product.data);
+                        responseData.productsSold.push(product.productsSold);
+                        responseData.idProducts.push(product.idProducts);
+                        responseData.totalAmountProducts.push(product.totalAmountProducts);
+                        responseData.quantitityProducts.push(product.quantitityProducts);
+                    });
+
+                    res.status(200).json({ status: 'error', responseData: responseData });
+                }
+            } catch (error) {
+                console.error(error);
+                res.status(401).json({ status: 'error', message: 'internal server error' });
+            }
+        }
+
+        requestInfo();
+    });
+
     router.post('/addPayment', (req, res, next) => {
         const userData = req.body;
 
         db.query(
-            'INSERT INTO payments (owner_id, payment_method, amount, discount) VALUES (?, ?, ?, ?)',
-            [userData.owner_id, userData.payment_method, userData.amount, userData.discount],
+            'INSERT INTO payments (owner_id, isCashRegister_id, payment_method, amount, discount) VALUES (?, ?, ?, ?, ?)',
+            [userData.owner_id, userData.isCashRegister_id, userData.payment_method, userData.amount, userData.discount],
             (error, results) => {
                 if (error) {
                     console.error(error);
@@ -338,7 +405,7 @@ function createRouter(db) {
                 console.error(hourlyError);
                 res.status(500).json({ status: 'error connecting to database' });
             } else {
-                if (hourlyResults.length > 0) {
+                if (hourlyResults.salesCount > 0) {
                     responseData.hourlySales = fillEmptyHours(hourlyResults);
                     responseData.hourlySalesProducts = organizeResultsByQuantity(hourlyResults);
                 } else {
@@ -362,7 +429,7 @@ function createRouter(db) {
                         console.error(dailyError);
                         res.status(500).json({ status: 'error connecting to database' });
                     } else {
-                        if (dailyResults.length > 0) {
+                        if (dailyResults.salesCount > 0) {
                             responseData.dailySales = fillEmptyDays(dailyResults);
                             responseData.dailySalesProducts = organizeResultsByQuantity(dailyResults);
                         } else {
@@ -386,7 +453,7 @@ function createRouter(db) {
                                 console.error(monthlyError);
                                 res.status(500).json({ status: 'error connecting to database' });
                             } else {
-                                if (monthlyResults.length > 0) {
+                                if (monthlyResults.salesCount > 0) {
                                     responseData.monthlySales = fillEmptyMonths(monthlyResults);
                                     responseData.monthlySalesProducts = organizeResultsByQuantity(monthlyResults);
                                 } else {

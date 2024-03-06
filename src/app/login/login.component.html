@@ -7,7 +7,7 @@
 
     <div *ngIf="tabLoginRegister == 0" class="content_boxLoginRegister">
         <input type="text" class="input_boxLoginRegister" [(ngModel)]="emailInput_login" placeholder="Email">
-        <input type="text" class="input_boxLoginRegister" [(ngModel)]="passwordInput_login" placeholder="Senha">
+        <input type="password" class="input_boxLoginRegister" [(ngModel)]="passwordInput_login" placeholder="Senha">
         <div (click)="enterLogin()" class="buttonSend_boxLoginRegister" [class.selectButtonSendColor]="showMessagesInLogin">
             <p *ngIf="showMessageDefault">Acessar</p>
             <div *ngIf="showMessagesInLogin">

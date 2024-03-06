@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../api.service';
+import { AuthService } from '../../auth.service';
 
 // rxjs
 import { catchError } from 'rxjs/operators';
@@ -12,7 +13,7 @@ import { EMPTY } from 'rxjs';
 })
 
 export class MenuManageCashRegisterComponent {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private authService: AuthService) { };
 
   isBack: boolean = false;
 
@@ -64,7 +65,7 @@ export class MenuManageCashRegisterComponent {
         this.changeColorInput(1);
       } else {
         const userData = {
-          user_id: 1,
+          user_id: this.authService.getInfoUser()?.owner_id,
           name: this.nameCashRegister,
           pass: this.passCashRegister,
         };
@@ -133,7 +134,7 @@ export class MenuManageCashRegisterComponent {
   arrayCashRegisters: any = [];
   requestShowCashRegisters() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.showCashRegisters(userData)
@@ -151,9 +152,30 @@ export class MenuManageCashRegisterComponent {
           return { ...register, selectBox: false };
         });
 
-        // default
-        this.arrayCashRegisters[0].selectBox = true;
-        this.cashRegisterSelect = this.arrayCashRegisters[0];
+        // // default
+        // this.arrayCashRegisters[0].selectBox = true;
+        // this.cashRegisterSelect = this.arrayCashRegisters[0];
+      });
+  }
+
+  requestInfoAboutCashRegister() {
+    const userData = {
+      user_id: this.authService.getInfoUser()?.owner_id,
+      cashRegisterSelect: this.cashRegisterSelect.cashRegister_id,
+    };
+
+    this.apiService.infoAboutCashRegister(userData)
+      .pipe(
+        catchError(error => {
+          if (error.status == 401) {
+            // console.log("produto não encontrado");
+          }
+          return EMPTY;
+          // throw error;
+        })
+      )
+      .subscribe(response => {
+        console.log(response.responseData);
       });
   }
 
@@ -164,5 +186,7 @@ export class MenuManageCashRegisterComponent {
 
     this.arrayCashRegisters[indexArray].selectBox = true;
     this.cashRegisterSelect = this.arrayCashRegisters[indexArray];
+
+    this.requestInfoAboutCashRegister();
   }
 }

@@ -7,7 +7,7 @@
     </div>
 
     <div id="flexChangeMenu">
-      <div class="boxChangeMenu" [class.isSelected]="selectMenu === 0" (click)="selectBox(0)">
+      <div *ngIf="permissionsArray[3] == 1" class="boxChangeMenu" [class.isSelected]="selectMenu === 0" (click)="selectBox(0)">
         <img src="../assets/home.svg" alt="">
       </div>
 
@@ -15,11 +15,11 @@
         <img src="../assets/emission_icon.svg" alt="">
       </div>
 
-      <div class="boxChangeMenu" [class.isSelected]="selectMenu === 2" (click)="selectBox(2)">
+      <div *ngIf="permissionsArray[0] == 1" class="boxChangeMenu" [class.isSelected]="selectMenu === 2" (click)="selectBox(2)">
         <img src="../assets/manageProducts.svg" alt="">
       </div>
 
-      <div class="boxChangeMenu" [class.isSelected]="selectMenu === 3" (click)="selectBox(3)">
+      <div *ngIf="permissionsArray[3] == 1" class="boxChangeMenu" [class.isSelected]="selectMenu === 3" (click)="selectBox(3)">
         <img src="../assets/cashRegister_icon.svg" alt="">
       </div>
     </div>
@@ -28,7 +28,7 @@
       <img src="../assets/config.svg" alt="">
     </div>
 
-    <img src="../assets/logotype.svg" alt="">
+    <img (click)="loggedOut()" src="../assets/logotype.svg" alt="">
   </div>
 
   <div id="contentCenter">

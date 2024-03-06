@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../api.service';
+import { AuthService } from '../../auth.service';
 // rxjs
 import { catchError } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -10,7 +11,7 @@ import { EMPTY } from 'rxjs';
   styleUrl: './menu-emission-product.component.css'
 })
 export class MenuEmissionProductComponent {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private authService: AuthService) { };
 
   // init
   ngOnInit(): void {
@@ -108,31 +109,37 @@ export class MenuEmissionProductComponent {
   isSearchProductTable: boolean = false;
 
   searchProductTable() {
-    if (this.searchProductTableInput != "") {
-      this.isSearchProductTable = true;
-      const produtosArray = Object.values(this.productData);
+    if (this.productData != undefined) {
+      if (this.searchProductTableInput != "") {
+        this.isSearchProductTable = true;
+        const produtosArray = Object.values(this.productData);
 
-      this.correspondingProducts = produtosArray
-        .map((produto: any, index: number) =>
-          produto.product_name.toLowerCase().includes(this.searchProductTableInput.toLowerCase()) ? index : undefined
-        )
-        .filter(index => index !== undefined);
+        this.correspondingProducts = produtosArray
+          .map((produto: any, index: number) =>
+            produto.product_name.toLowerCase().includes(this.searchProductTableInput.toLowerCase()) ? index : undefined
+          )
+          .filter(index => index !== undefined);
 
-      const startIndex = (this.currentPage - 1) * this.productsPerPage;
-      const endIndex = Math.min(startIndex + this.productsPerPage, this.correspondingProducts.length);
+        const startIndex = (this.currentPage - 1) * this.productsPerPage;
+        const endIndex = Math.min(startIndex + this.productsPerPage, this.correspondingProducts.length);
 
-      this.indexAcessProduct = this.correspondingProducts.slice(startIndex, endIndex);
-      this.pageMax = Math.ceil(this.correspondingProducts.length / this.productsPerPage);
-    } else {
-      this.isSearchProductTable = false;
-      this.indexAcessProduct = Array.from({ length: this.productsPerPage }, (_, index) => index);;
-      this.correspondingProducts = [];
+        this.indexAcessProduct = this.correspondingProducts.slice(startIndex, endIndex);
+        this.pageMax = Math.ceil(this.correspondingProducts.length / this.productsPerPage);
+      } else {
+        this.isSearchProductTable = false;
+        if (this.productData.length > this.productsPerPage) {
+          this.indexAcessProduct = Array.from({ length: this.productsPerPage }, (_, index) => index);
+        } else {
+          this.indexAcessProduct = Array.from({ length: this.productData.length }, (_, index) => index);
+        }
+        this.correspondingProducts = [];
+      }
     }
   }
 
   showProductTable() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.showProductTable(userData)
@@ -211,16 +218,15 @@ export class MenuEmissionProductComponent {
           const arrayProductID = this.arrayIn_boxCheckOutProducts.map((index: any) => this.productData[index].product_id);
 
           const userData = {
-            owner_id: 1,
+            owner_id: this.authService.getInfoUser()?.owner_id,
+            isCashRegister_id	: this.authService.getInfoUser()?.isCashRegister_id	,
             payment_method: this.optionSelect,
             amount: priceTotalConvert,
             discount: discountSubConvert,
             arrayProductID: arrayProductID,
             numberQuantity: this.numberQuantity
           };
-
-          console.log(userData);
-
+          
           this.apiService.addPayment(userData)
             .pipe(
               catchError(error => {
@@ -247,11 +253,11 @@ export class MenuEmissionProductComponent {
                 setTimeout(() => {
                   this.optionBallStatus = 2;
                 }, 900);
-            
+
                 setTimeout(() => {
                   this.optionBallStatus = 3;
                 }, 1700);
-            
+
                 setTimeout(() => {
                   this.optionBallStatus = 0;
                   this.finishPayment = false;

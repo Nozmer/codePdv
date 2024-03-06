@@ -69,4 +69,9 @@ export class ApiService {
     const url = `${this.apiUrl}/showCashRegisters`;
     return this.http.post(url, data);
   }
+
+  infoAboutCashRegister(data: any): Observable<any> {
+    const url = `${this.apiUrl}/infoAboutCashRegister`;
+    return this.http.post(url, data);
+  }
 }

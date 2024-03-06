@@ -12,7 +12,7 @@ import { EMPTY } from 'rxjs';
 })
 export class LoginComponent {
   constructor(private apiService: ApiService, private ngZone: NgZone, private authService: AuthService) { }
-  
+
   @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
 
   // changeTabLoginRegister
@@ -136,19 +136,14 @@ export class LoginComponent {
           .pipe(
             catchError(error => {
               this.showMessage("login", "error");
-              console.log(error);
               return EMPTY;
             })
           )
           .subscribe(response => {
-            this.showMessage("login", "ok");
-            
-            console.log(response);
-            
-            // this.authService.setToken(response.token);
-            // this.userLoggedIn.emit({isLoggedIn: true, isCashRegister: response.isCashRegister});
+            this.showMessage("login", "ok");            
+            this.authService.setToken(response.token);
+            this.userLoggedIn.emit({ isLoggedIn: true });
           });
-
       } else {
         this.showMessage("login", "blank");
       }

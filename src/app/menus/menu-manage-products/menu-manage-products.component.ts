@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataService } from '../../data-service.service';
 import { ApiService } from '../../api.service';
+import { AuthService } from '../../auth.service';
+
 import anime from 'animejs/lib/anime.es.js';
 
 // rxjs
@@ -17,7 +19,7 @@ export class MenuManageProductsComponent {
   @ViewChild('popUpRemove', { read: ElementRef }) popUpRemove: ElementRef | undefined;
   @ViewChild('manageProducts') manageProducts: ElementRef | undefined;
 
-  constructor(private apiService: ApiService, private dataService: DataService) { }
+  constructor(private apiService: ApiService,  private authService: AuthService, private dataService: DataService) { }
 
   showError403InTableProduct: boolean = true;
 
@@ -75,7 +77,7 @@ export class MenuManageProductsComponent {
 
   showProductTable() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.showProductTable(userData)

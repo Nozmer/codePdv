@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
+import { AuthService } from '../../auth.service';
 import { catchError } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
@@ -11,7 +12,8 @@ import Chart from 'chart.js/auto';
   styleUrl: './menu-dashboard.component.css'
 })
 export class MenuDashboardComponent implements OnInit {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private authService: AuthService) { };
+
 
   // init
   ngOnInit(): void {
@@ -26,7 +28,7 @@ export class MenuDashboardComponent implements OnInit {
 
   showProductTable() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.showProductTable(userData)
@@ -59,7 +61,7 @@ export class MenuDashboardComponent implements OnInit {
 
   requestSalesStatistics() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.salesStatistics(userData)
@@ -73,8 +75,6 @@ export class MenuDashboardComponent implements OnInit {
         })
       )
       .subscribe(response => {
-        console.log(response.hourlySales);
-
         if (response.hourlySales) {
           this.dataHourlySales = response.hourlySales.map((item: any) => item.salesCount);
           this.hourlySalesProducts = response.hourlySalesProducts;
@@ -102,7 +102,7 @@ export class MenuDashboardComponent implements OnInit {
 
   requestProductRecent() {
     const userData = {
-      user_id: 1,
+      user_id: this.authService.getInfoUser()?.owner_id,
     };
 
     this.apiService.productRecent(userData)
@@ -126,31 +126,33 @@ export class MenuDashboardComponent implements OnInit {
   data: any = [];
 
   changeInfoPeriodical(option: number) {
-    if (option == 1) {
-      this.label = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00',
-        '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
-        '22:00', '23:00'];
-      this.data = this.dataHourlySales;
-      this.lenghtSales = this.lenghtHourlySales;
-      this.sendTopSellingProducts(this.hourlySalesProducts);
-    } else if (option == 2) {
-      this.label = [
-        'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'
-      ];
-      this.data = this.dataDailySales;
-      this.lenghtSales = this.lenghtDailySales;
-      this.sendTopSellingProducts(this.dailySalesProducts);
-    } else {
-      this.label =
-        ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-      this.data = this.dataMonthlySales;
-      this.lenghtSales = this.lenghtMonthlySales;
-      this.sendTopSellingProducts(this.monthlySalesProducts);
-    }
+    if (this.productData.lenght > 0) {
+      if (option == 1) {
+        this.label = ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00',
+          '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00',
+          '22:00', '23:00'];
+        this.data = this.dataHourlySales;
+        this.lenghtSales = this.lenghtHourlySales;
+        this.sendTopSellingProducts(this.hourlySalesProducts);
+      } else if (option == 2) {
+        this.label = [
+          'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'
+        ];
+        this.data = this.dataDailySales;
+        this.lenghtSales = this.lenghtDailySales;
+        this.sendTopSellingProducts(this.dailySalesProducts);
+      } else {
+        this.label =
+          ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        this.data = this.dataMonthlySales;
+        this.lenghtSales = this.lenghtMonthlySales;
+        this.sendTopSellingProducts(this.monthlySalesProducts);
+      }
 
-    this.optionSelectPeriodical = option;
-    this.addData(this.chart, this.label, this.data);
+      this.optionSelectPeriodical = option;
+      this.addData(this.chart, this.label, this.data);
+    };
   }
 
   // insert top selling products

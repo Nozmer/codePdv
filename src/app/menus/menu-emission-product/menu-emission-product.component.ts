@@ -50,8 +50,9 @@ export class MenuEmissionProductComponent {
     const product = this.productData[indexProduct];
 
     const price = parseFloat(product.price.replace(',', '.'));
+    
     const discountPercentage = parseFloat(product.discount);
-
+    
     const discountAmount = (price * discountPercentage) / 100;
     const total = price - discountAmount;
     const subtotal = price;

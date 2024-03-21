@@ -30,6 +30,7 @@ import { PopupDeleteProductComponent } from './componentObjects/popup-delete-pro
 import { LogMessagePanelComponent } from './componentObjects/log-message-panel/log-message-panel.component';
 import { BoxRecentActivityComponent } from './componentObjects/box-recent-activity/box-recent-activity.component';
 import { BoxContentBoxShowCashRegistersComponent } from './componentObjects/box-content-box-show-cash-registers/box-content-box-show-cash-registers.component';
+import { BoxShowErrorComponent } from './componentObjects/box-show-error/box-show-error.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { BoxContentBoxShowCashRegistersComponent } from './componentObjects/box-
     PopupDeleteProductComponent,
     LogMessagePanelComponent,
     BoxRecentActivityComponent,
-    BoxContentBoxShowCashRegistersComponent
+    BoxContentBoxShowCashRegistersComponent,
+    BoxShowErrorComponent
   ],
   imports: [
     JwtModule.forRoot({

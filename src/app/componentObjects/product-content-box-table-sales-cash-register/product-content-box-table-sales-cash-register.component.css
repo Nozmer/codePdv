@@ -16,11 +16,12 @@
 
 .product_content_boxTableSalesCashRegister h2 {
     font-size: 13px;
-    width: 75px;
+    width: auto;
 }
 
 .product_content_boxTableSalesCashRegister h2:nth-child(2) {
     flex: 1 0 0;
+    cursor: pointer;
     width: auto;
 }
 

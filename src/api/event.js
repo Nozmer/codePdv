@@ -51,7 +51,7 @@ function createRouter(db) {
         async function checkPassword() {
             try {
                 const result = await dbQueryAsync(
-                    'SELECT login.email AS login_email, login.password AS login_password, login.user_id AS login_userId, cashRegister.password AS cashRegister_password, cashRegister.permissions AS cashRegister_permissions, cashRegister.cashRegister_id AS cashRegister_id FROM login LEFT JOIN cashRegister ON login.email = cashRegister.email WHERE login.email = ?',
+                    'SELECT login.email AS login_email, login.typePlan AS login_typePlan, login.password AS login_password, login.user_id AS login_userId, cashRegister.password AS cashRegister_password, cashRegister.permissions AS cashRegister_permissions, cashRegister.cashRegister_id AS cashRegister_id FROM login LEFT JOIN cashRegister ON login.email = cashRegister.email WHERE login.email = ?',
                     [email]
                 );
 
@@ -62,7 +62,7 @@ function createRouter(db) {
                     const passwordUserMatch = await bcrypt.compare(password, result[0].login_password);
 
                     if (passwordUserMatch) {
-                        const token = jwt.sign({ owner_id: result[0].login_userId, isCashRegister_id: 0, permissions: "1,1,1,1" }, 'seu_segredo_secreto', { expiresIn: '1h' });
+                        const token = jwt.sign({ owner_id: result[0].login_userId, typePlan: result[0].login_typePlan, isCashRegister_id: 0, permissions: "1,1,1,1" }, 'seu_segredo_secreto', { expiresIn: '1h' });
                         res.status(200).json({ status: 'ok', token: token, cashRegister_id: 0 });
                     } else {
                         // check second password cashRegister
@@ -80,7 +80,7 @@ function createRouter(db) {
                         }
 
                         if (cashRegisterMatchFound) {
-                            const token = jwt.sign({ owner_id: result[0].login_userId, isCashRegister_id: result[indexCashRegisterMatchFound].cashRegister_id, permissions: result[indexCashRegisterMatchFound].cashRegister_permissions }, 'seu_segredo_secreto', { expiresIn: '1h' });
+                            const token = jwt.sign({ owner_id: result[0].login_userId, typePlan: result[0].login_typePlan, isCashRegister_id: result[indexCashRegisterMatchFound].cashRegister_id, permissions: result[indexCashRegisterMatchFound].cashRegister_permissions }, 'seu_segredo_secreto', { expiresIn: '1h' });
                             res.status(200).json({ status: 'ok', token: token });
                         } else {
                             res.status(401).json({ status: 'error', message: 'incorrect password' });
@@ -229,6 +229,7 @@ function createRouter(db) {
             idProducts: [],
             totalAmountProducts: [],
             quantitityProducts: [],
+            typePagament: [],
         };
 
         async function requestInfo() {
@@ -238,27 +239,53 @@ function createRouter(db) {
                     COUNT(*) AS productsSold,
                     GROUP_CONCAT(pp.product_id) AS idProducts,
                     p.amount AS totalAmountProducts,
+                    p.payment_method AS typePagament,
                     GROUP_CONCAT(pp.quantity) AS quantitityProducts
                     FROM payments p
                     JOIN paymentProducts pp ON p.payment_id = pp.payment_id
-                    WHERE p.owner_id = ? AND p.isCashRegister_id = ? AND DATE(p.payment_date) = CURDATE() GROUP BY data`,
+                    WHERE p.owner_id = ? AND p.isCashRegister_id = ? GROUP BY data DESC`,
                     [owner_id, cashRegister_id]
                 );
 
                 if (result.length === 0) {
                     res.status(401).json({ status: 'error', message: 'no found sales on cashRegister' });
                 } else {
-                    
+
                     result.forEach(product => {
                         responseData.data.push(product.data);
                         responseData.productsSold.push(product.productsSold);
                         responseData.idProducts.push(product.idProducts);
                         responseData.totalAmountProducts.push(product.totalAmountProducts);
                         responseData.quantitityProducts.push(product.quantitityProducts);
+                        responseData.typePagament.push(product.typePagament);
                     });
 
                     res.status(200).json({ status: 'error', responseData: responseData });
                 }
+            } catch (error) {
+                console.error(error);
+                res.status(401).json({ status: 'error', message: 'internal server error' });
+            }
+        }
+
+        requestInfo();
+    });
+
+    router.post('/changePermissionsCash', (req, res, next) => {
+        const owner_id = req.body.user_id;
+        const cashRegister_id = req.body.cashRegisterSelect;
+        const permissions = req.body.permissions;
+
+        async function requestInfo() {
+            try {
+                await dbQueryAsync(
+                    `UPDATE cashRegister
+                    SET permissions = ? 
+                    WHERE owner_id = ? AND cashRegister_id = ?`,
+                    [permissions, owner_id, cashRegister_id]
+                );
+
+                res.status(200).json({ status: 'ok' });
             } catch (error) {
                 console.error(error);
                 res.status(401).json({ status: 'error', message: 'internal server error' });
@@ -405,7 +432,7 @@ function createRouter(db) {
                 console.error(hourlyError);
                 res.status(500).json({ status: 'error connecting to database' });
             } else {
-                if (hourlyResults.salesCount > 0) {
+                if (hourlyResults.length > 0) {
                     responseData.hourlySales = fillEmptyHours(hourlyResults);
                     responseData.hourlySalesProducts = organizeResultsByQuantity(hourlyResults);
                 } else {
@@ -429,7 +456,7 @@ function createRouter(db) {
                         console.error(dailyError);
                         res.status(500).json({ status: 'error connecting to database' });
                     } else {
-                        if (dailyResults.salesCount > 0) {
+                        if (dailyResults.length > 0) {
                             responseData.dailySales = fillEmptyDays(dailyResults);
                             responseData.dailySalesProducts = organizeResultsByQuantity(dailyResults);
                         } else {
@@ -453,7 +480,7 @@ function createRouter(db) {
                                 console.error(monthlyError);
                                 res.status(500).json({ status: 'error connecting to database' });
                             } else {
-                                if (monthlyResults.salesCount > 0) {
+                                if (monthlyResults.length > 0) {
                                     responseData.monthlySales = fillEmptyMonths(monthlyResults);
                                     responseData.monthlySalesProducts = organizeResultsByQuantity(monthlyResults);
                                 } else {

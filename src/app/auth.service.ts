@@ -24,10 +24,10 @@ export class AuthService {
         localStorage.setItem(this.tokenKey, token);
     }
 
-    getInfoUser(): { owner_id: number, isCashRegister_id: number, permissions: string } | null {
+    getInfoUser(): { owner_id: number, typePlan: number, isCashRegister_id: number, permissions: string } | null {
         if (this.token) {
             const decodedToken = this.jwtHelper.decodeToken(this.token);
-            return {owner_id: decodedToken.owner_id, isCashRegister_id: decodedToken.isCashRegister_id, permissions: decodedToken.permissions};
+            return {owner_id: decodedToken.owner_id, typePlan: decodedToken.typePlan, isCashRegister_id: decodedToken.isCashRegister_id, permissions: decodedToken.permissions};
         }
         return null;
     }

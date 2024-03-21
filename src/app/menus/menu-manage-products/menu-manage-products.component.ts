@@ -59,7 +59,11 @@ export class MenuManageProductsComponent {
       this.pageMax = Math.ceil(this.correspondingProducts.length / this.productsPerPage);
     } else {
       this.isSearchProductTable = false;
-      this.indexAcessProduct = [0, 1, 2, 3];
+      if (this.productData.length > this.productsPerPage) {
+        this.indexAcessProduct = Array.from({ length: this.productsPerPage }, (_, index) => index);
+      } else {
+        this.indexAcessProduct = Array.from({ length: this.productData.length }, (_, index) => index);
+      }
       this.correspondingProducts = [];
     }
   }

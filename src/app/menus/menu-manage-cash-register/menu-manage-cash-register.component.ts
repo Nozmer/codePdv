@@ -20,9 +20,8 @@ export class MenuManageCashRegisterComponent {
   // init
   ngOnInit(): void {
     this.requestShowCashRegisters();
+    this.requestAllProduct();
   }
-
-  productData: any = [];
 
   // selectBoxCashRegister
   boxSelectCashRegister: number = 0;
@@ -43,6 +42,41 @@ export class MenuManageCashRegisterComponent {
     this.permissions[index] = activated;
   }
 
+  finishSendPermission: boolean = false;
+  errorSendPermission: boolean = false;
+
+  sendPermissonsChange() {
+    const convertedArray = this.permissions.map(element => element ? 1 : 0);
+
+    if (convertedArray.join(', ') != this.cashRegisterSelect.permissions && !this.finishSendPermission && !this.errorSendPermission) {
+      const userData = {
+        user_id: this.authService.getInfoUser()?.owner_id,
+        cashRegisterSelect: this.cashRegisterSelect.cashRegister_id,
+        permissions: convertedArray.join(', ')
+      };
+
+      this.apiService.changePermissionsCash(userData)
+        .pipe(
+          catchError(error => {
+            this.errorSendPermission = true;
+            setTimeout(() => {
+              this.errorSendPermission = false;
+            }, 2000);
+            return EMPTY;
+            // throw error;
+          })
+        )
+        .subscribe(response => {
+          this.finishSendPermission = true;
+          setTimeout(() => {
+            this.finishSendPermission = false;
+          }, 2000);
+        });
+    } else {
+      console.log("iguale");
+    }
+  }
+
   // cashRegister
   cashRegisterSelect: any;
   showListCashRegister: boolean = true;
@@ -57,20 +91,33 @@ export class MenuManageCashRegisterComponent {
   inAnimationOrLoading: boolean = false;
   borderInputName: string = "";
   borderinputPass: string = "";
+  showErroPlanCash: boolean = false;
+  numberCashAllow: number = 0;
+
   addCashRegister() {
     if (!this.inAnimationOrLoading) {
       if (this.nameCashRegister == "") {
         this.changeColorInput(0);
       } else if (this.passCashRegister == "") {
         this.changeColorInput(1);
-      } else {
-        const userData = {
-          user_id: this.authService.getInfoUser()?.owner_id,
-          name: this.nameCashRegister,
-          pass: this.passCashRegister,
-        };
+      } else {        
+        if (this.arrayCashRegisters.length >= 2 && this.authService.getInfoUser()?.typePlan == 0) {
+          this.numberCashAllow = 2;
+          this.showErroPlanCash = true;
 
-        this.requestNewCashRegister(userData);
+          setTimeout(() => {
+            this.showErroPlanCash = false;
+          }, 2000);
+
+        } else {
+          const userData = {
+            user_id: this.authService.getInfoUser()?.owner_id,
+            name: this.nameCashRegister,
+            pass: this.passCashRegister,
+          };
+
+          this.requestNewCashRegister(userData);
+        }
       }
     }
   }
@@ -158,6 +205,7 @@ export class MenuManageCashRegisterComponent {
       });
   }
 
+  arrayLatestCashSales: any;
   requestInfoAboutCashRegister() {
     const userData = {
       user_id: this.authService.getInfoUser()?.owner_id,
@@ -168,15 +216,85 @@ export class MenuManageCashRegisterComponent {
       .pipe(
         catchError(error => {
           if (error.status == 401) {
-            // console.log("produto não encontrado");
+            this.showTableLastSalesCashRegister = false;
+            this.showErroInDashBoard = true;
+            this.totalSalesCash = 0;
+          }
+          // return EMPTY;
+          throw error;
+        })
+      )
+      .subscribe(response => {
+        this.showErroInDashBoard = false;
+        this.showTableLastSalesCashRegister = true;
+        this.arrayLatestCashSales = response.responseData;
+        this.totalSalesCash = this.arrayLatestCashSales.data.length;
+        this.updatePages();
+      });
+  }
+
+  productData: any = [];
+  requestAllProduct() {
+    const userData = {
+      user_id: this.authService.getInfoUser()?.owner_id,
+    };
+
+    this.apiService.showProductTable(userData)
+      .pipe(
+        catchError(error => {
+          if (error.status == 401) {
+            console.log("produto não encontrado");
           }
           return EMPTY;
           // throw error;
         })
       )
       .subscribe(response => {
-        console.log(response.responseData);
+        this.productData = response.products;
       });
+  }
+
+  showTableLastSalesCashRegister: boolean = false;
+  showErroInDashBoard: boolean = false;
+  currentPage: number = 1;
+  totalSalesCash: number = 0;
+  productsPerPage: number = 2;
+  indexAcessProduct: any;
+  pageMax: number = 0;
+  updatePages() {
+    // Calcular o índice inicial e final dos produtos a serem exibidos
+    const startIndex = (this.currentPage - 1) * this.productsPerPage;
+    const endIndex = Math.min(startIndex + this.productsPerPage, this.arrayLatestCashSales.data.length);
+
+    this.indexAcessProduct = Array.from({ length: endIndex - startIndex }, (_, index) => startIndex + index);
+
+    // Atualizar os números da página
+    this.pageMax = Array.from({ length: Math.ceil(this.arrayLatestCashSales.data.length / this.productsPerPage) }, (_, index) => index + 1).length;
+  }
+
+  previousPage(isPreviousPage: boolean) {
+    if (isPreviousPage) {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.updatePages();
+        // if (!this.isSearchProductTable) {
+        //   this.showProductTable();
+        // } else {
+        //   this.searchProductTable();
+        // }
+      }
+    }
+    else {
+      if (this.currentPage < this.pageMax) {
+        this.currentPage++;
+        this.updatePages();
+        // if (!this.isSearchProductTable) {
+        //   this.showProductTable();
+        // } else {
+        //   this.searchProductTable();
+        // }
+      }
+    }
   }
 
   changeSelectBox(indexArray: any) {
@@ -186,6 +304,9 @@ export class MenuManageCashRegisterComponent {
 
     this.arrayCashRegisters[indexArray].selectBox = true;
     this.cashRegisterSelect = this.arrayCashRegisters[indexArray];
+
+    const convertedArray = this.cashRegisterSelect.permissions.split(", ").map((element: string) => element === '1' ? true : false);
+    this.permissions = convertedArray
 
     this.requestInfoAboutCashRegister();
   }

@@ -70,6 +70,11 @@ export class ApiService {
     return this.http.post(url, data);
   }
 
+  changePermissionsCash(data: any): Observable<any> {
+    const url = `${this.apiUrl}/changePermissionsCash`;
+    return this.http.post(url, data);
+  }
+
   infoAboutCashRegister(data: any): Observable<any> {
     const url = `${this.apiUrl}/infoAboutCashRegister`;
     return this.http.post(url, data);
